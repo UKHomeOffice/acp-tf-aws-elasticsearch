@@ -43,5 +43,17 @@ variable "master_user_name" {
 }
 
 variable "master_user_password" {
+  description = "The master user password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+}
+
+variable "vpc_id" {
   
+}
+
+variable "subnet_ids" {
+  
+}
+
+variable "sg_ingress_cidr" {
+  default = "10.250.0.0/18"
 }

@@ -5,6 +5,12 @@ resource "aws_elasticsearch_domain" "cluster" {
   cluster_config {
     instance_type = var.instance_type
     instance_count = var.instance_count
+
+    zone_awareness_enabled = true
+    
+    zone_awareness_config {
+      availability_zone_count = 3
+    }
   }
 
   snapshot_options {
@@ -62,31 +68,10 @@ resource "aws_elasticsearch_domain" "cluster" {
     }
   }
 
-  depends_on = [aws_iam_service_linked_role.es]
-
 }
 
 resource "aws_iam_service_linked_role" "es" {
+  count            = var.create_iam_service_linked_role == "true" ? 1 : 0
   aws_service_name = "es.amazonaws.com"
 }
 
-# resource "aws_elasticsearch_domain_policy" "main" {
-#   domain_name = aws_elasticsearch_domain.cluster.domain_name
-
-#   access_policies = <<POLICIES
-# {
-#     "Version": "2012-10-17",
-#     "Statement": [
-#         {
-#             "Action": "es:*",
-#             "Principal": "*",
-#             "Effect": "Allow",
-#             "Condition": {
-#                 "IpAddress": {"aws:SourceIp": "0.0.0.0/0"}
-#             },
-#             "Resource": "${aws_elasticsearch_domain.cluster.arn}/*"
-#         }
-#     ]
-# }
-# POLICIES
-# }

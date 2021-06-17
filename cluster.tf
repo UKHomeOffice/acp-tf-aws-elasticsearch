@@ -75,3 +75,22 @@ resource "aws_iam_service_linked_role" "es" {
   aws_service_name = "es.amazonaws.com"
 }
 
+resource "aws_elasticsearch_domain_policy" "main" {
+  domain_name = aws_elasticsearch_domain.cluster.domain_name
+
+  access_policies = <<POLICIES
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "es:ESHttp*",
+            "Principal": {
+                  "AWS": "*"
+                  },
+            "Effect": "Allow",
+            "Resource": "${aws_elasticsearch_domain.cluster.arn}/*"
+        }
+    ]
+}
+POLICIES
+}

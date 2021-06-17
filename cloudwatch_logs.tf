@@ -21,7 +21,7 @@ resource "aws_cloudwatch_log_resource_policy" "es_log_group_policy" {
         "logs:PutLogEventsBatch",
         "logs:CreateLogStream"
       ],
-      "Resource": "${aws_cloudwatch_log_group.es_domain_log_group.arn}/*"
+      "Resource": "arn:aws:logs:*"
     }
   ]
 }

@@ -11,6 +11,13 @@ resource "aws_elasticsearch_domain" "cluster" {
     automated_snapshot_start_hour = var.automated_snapshot_start_hour
   }
 
+  vpc_options {
+
+    subnet_ids = var.subnet_ids
+
+    security_group_ids = [aws_security_group.es.id]
+  }
+
   tags = var.tags
 
   encrypt_at_rest {
@@ -54,56 +61,32 @@ resource "aws_elasticsearch_domain" "cluster" {
       master_user_password = var.master_user_password
     }
   }
+
+  depends_on = [aws_iam_service_linked_role.es]
+
 }
 
-
-resource "aws_elasticsearch_domain_policy" "main" {
-  domain_name = aws_elasticsearch_domain.cluster.domain_name
-
-  access_policies = <<POLICIES
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "es:*",
-            "Principal": "*",
-            "Effect": "Allow",
-            "Condition": {
-                "IpAddress": {"aws:SourceIp": "0.0.0.0/0"}
-            },
-            "Resource": "${aws_elasticsearch_domain.cluster.arn}/*"
-        }
-    ]
-}
-POLICIES
+resource "aws_iam_service_linked_role" "es" {
+  aws_service_name = "es.amazonaws.com"
 }
 
-resource "aws_cloudwatch_log_group" "es_domain_log_group" {
-  name = "es-${var.domain_name}"
+# resource "aws_elasticsearch_domain_policy" "main" {
+#   domain_name = aws_elasticsearch_domain.cluster.domain_name
 
-  tags = var.tags
-}
-
-resource "aws_cloudwatch_log_resource_policy" "es_log_group_policy" {
-  policy_name = "es-${var.domain_name}"
-
-  policy_document = <<CONFIG
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "es.amazonaws.com"
-      },
-      "Action": [
-        "logs:PutLogEvents",
-        "logs:PutLogEventsBatch",
-        "logs:CreateLogStream"
-      ],
-      "Resource": "${aws_cloudwatch_log_group.es_domain_log_group.arn}"
-    }
-  ]
-}
-CONFIG
-}
+#   access_policies = <<POLICIES
+# {
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Action": "es:*",
+#             "Principal": "*",
+#             "Effect": "Allow",
+#             "Condition": {
+#                 "IpAddress": {"aws:SourceIp": "0.0.0.0/0"}
+#             },
+#             "Resource": "${aws_elasticsearch_domain.cluster.arn}/*"
+#         }
+#     ]
+# }
+# POLICIES
+# }

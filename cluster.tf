@@ -3,11 +3,14 @@ resource "aws_elasticsearch_domain" "cluster" {
   elasticsearch_version = var.elasticsearch_version
 
   cluster_config {
-    instance_type = var.instance_type
-    instance_count = var.instance_count
+    instance_type            = var.data_instance_type
+    instance_count           = var.data_instance_count
 
-    zone_awareness_enabled = true
+    dedicated_master_enabled = var.master_enabled
+    dedicated_master_count   = var.master_instance_count
+    dedicated_master_type    = var.master_instance_type
     
+    zone_awareness_enabled   = true
     zone_awareness_config {
       availability_zone_count = 3
     }

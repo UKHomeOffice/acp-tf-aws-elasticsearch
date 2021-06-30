@@ -6,12 +6,27 @@ variable "elasticsearch_version" {
   
 }
 
-variable "instance_type" {
+variable "data_instance_type" {
   
 }
 
-variable "instance_count" {
+variable "data_instance_count" {
   
+}
+
+variable "master_enabled" {
+  default = false 
+  description = "Boolean value to enable/disable dedicated master nodes."
+}
+
+variable "master_instance_count" {
+  default = 0
+  description = "The amount of dedicated master nodes within the cluster."
+}
+
+variable "master_instance_type" {
+  default = ""
+  description = "The instance type for the dedicated master nodes."
 }
 
 variable "automated_snapshot_start_hour" {

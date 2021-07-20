@@ -53,9 +53,27 @@ variable "volume_size" {
     default = 0
 }
 
-variable "local_users" {
+variable "admin_users" {
   description = "group of users to be created in kibana."
-  default = ["logstash","proxy"]
+  default = ["alastair", "willem"]
+}
+
+variable "logstash_username" {
+  description = "Logstash username in Kibana RBAC"
+  default = "logstash-acp"
+}
+
+variable "logstash_password" {
+  description = "Logstash password in Kibana RBAC"
+}
+
+variable "proxy_username" {
+  description = "Proxy username in Kibana RBAC"
+  default = "auth-proxy"
+}
+
+variable "proxy_passwors" {
+  description = "Proxy password in Kibana RBAC"
 }
 
 variable "master_user_name" {

@@ -55,7 +55,7 @@ variable "volume_size" {
 
 variable "local_users" {
   description = "group of users to be created in kibana."
-  default = ""
+  default = ["logstash","proxy"]
 }
 
 variable "master_user_name" {

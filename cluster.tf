@@ -97,3 +97,16 @@ resource "aws_elasticsearch_domain_policy" "main" {
 }
 POLICIES
 }
+
+resource "null_resource" "create_local_users" {
+  count = var.local_users != "" ? 1 : 0
+
+  triggers = {
+    users = var.local_users
+  }
+
+  provisioner "local-exec" {
+    command = "./${data.template_file.user_script.rendered}"
+    interpreter = ["sh"]
+  }
+}

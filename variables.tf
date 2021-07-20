@@ -53,6 +53,11 @@ variable "volume_size" {
     default = 0
 }
 
+variable "local_users" {
+  description = "group of users to be created in kibana."
+  default = ""
+}
+
 variable "master_user_name" {
   
 }

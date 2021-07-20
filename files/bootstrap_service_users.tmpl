@@ -1,0 +1,62 @@
+#!/bin/bash
+
+curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${logstash_username}' -H 'Content-Type: application/json' -d '
+{
+  "cluster_permissions": ${logstash_cluster_permissions},
+  "index_permissions": [{
+      "index_patterns": ["*"],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": [
+          "read",
+          "write"
+      ]
+  }],
+  "tenant_permissions": [{
+      "tenant_patterns": [],
+      "allowed_actions": []
+  }]
+}
+' 
+
+curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/user/${logstash_username}' -H 'Content-Type: application/json' -d '
+{
+  "password": ${logstash_password},
+  "opendistro_security_roles": ["${logstash_username}"],
+  "backend_roles": [],
+  "attributes": {
+      "creation-mechanism": "tf-bootstrap-script",
+      "update-time": ${timestamp()}
+  }
+}
+'
+
+curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${proxy_username}' -H 'Content-Type: application/json' -d '
+{
+  "cluster_permissions": [],
+  "index_permissions": [{
+      "index_patterns": [],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": []
+  }],
+  "tenant_permissions": [{
+      "tenant_patterns": [],
+      "allowed_actions": []
+  }]
+}
+' 
+
+curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/user/${proxy_username}' -H 'Content-Type: application/json' -d '
+{
+  "password": ${proxy_password},
+  "opendistro_security_roles": ["${proxy_username}"],
+  "backend_roles": [],
+  "attributes": {
+      "creation-mechanism": "tf-bootstrap-script",
+      "update-time": ${timestamp()}
+  }
+}
+' 

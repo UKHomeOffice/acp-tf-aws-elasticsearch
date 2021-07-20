@@ -99,16 +99,20 @@ POLICIES
 }
 
 resource "null_resource" "create_local_users" {
-  count = var.local_users != "" ? 1 : 0
+  count = var.admin_users != "" ? 1 : 0
 
   triggers = {
-    users = join(",", var.local_users)
+    users = join(",", var.admin_users)
   }
 
   provisioner "local-exec" {
     command = "./${local_file.script.filename}"
     interpreter = ["sh"]
   }
+
+  depends_on = [
+    aws_elasticsearch_domain.cluster
+  ]
 }
 
 resource "local_file" "script" {
@@ -117,8 +121,33 @@ resource "local_file" "script" {
                   es_user=var.master_user_name,
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
-                  users=var.local_users, 
-                  password="test-passw0rd-123!"
+                  users=var.admin_users
                 })
-    filename = "${path.module}/user-script.sh"
+    filename = "${path.module}/admin-user-script.sh"
+}
+
+resource "null_resource" "bootstrap_service_users" {
+
+  provisioner "local-exec" {
+    command = "./${local_file.script.filename}"
+    interpreter = ["sh"]
+  }
+
+  depends_on = [
+    aws_elasticsearch_domain.cluster
+  ]
+}
+
+resource "local_file" "service_users_script" {
+    content  = templatefile("${path.module}/files/bootstrap_service_users.tmpl", 
+                {
+                  es_user=var.master_user_name,
+                  es_pass=var.master_user_password,
+                  aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
+                  logstash_username=var.logstash_username,
+                  logstash_password=var.logstash_password,
+                  proxy_username=var.proxy_username,
+                  proxy_password=var.proxy_password,
+                })
+    filename = "${path.module}/bootstrap-service-script.sh"
 }

@@ -116,12 +116,12 @@ resource "null_resource" "create_local_users" {
 }
 
 resource "local_file" "script" {
-    content  = templatefile("${path.module}/files/create_local_users.tmpl", 
+    content  = templatefile("${path.module}/files/create_admin_users.tmpl", 
                 {
                   es_user=var.master_user_name,
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
-                  users=var.admin_users
+                  admin_users=var.admin_users
                 })
     filename = "${path.module}/admin-user-script.sh"
 }
@@ -146,6 +146,7 @@ resource "local_file" "service_users_script" {
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
                   logstash_username=var.logstash_username,
                   logstash_password=var.logstash_password,
+                  proxy_cluster_permissions=var.proxy_cluster_permissions,
                   proxy_username=var.proxy_username,
                   proxy_password=var.proxy_password,
                 })

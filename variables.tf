@@ -72,8 +72,13 @@ variable "proxy_username" {
   default = "auth-proxy"
 }
 
-variable "proxy_passwors" {
+variable "proxy_password" {
   description = "Proxy password in Kibana RBAC"
+}
+
+variable "proxy_cluster_permissions" {
+  description = "Proxy cluster-level permissions"
+  default = "['a', 'b']"
 }
 
 variable "master_user_name" {

@@ -1,13 +1,13 @@
 #!/bin/bash
 
 %{ for user in admin_users }
-curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/user/${user}' -H 'Content-Type: application/json' -d '
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${user}" -H 'Content-Type: application/json' -d '
 { 
-  "password" : "${substr(sha1(user), 0, 20)}@",
+  "password" : "A${substr(sha1(user), 0, 10)}@",
   "opendistro_security_roles": ["all_access"],
   "attributes": {
       "creation-mechanism": "tf-bootstrap-script",
-      "update-time": ${timestamp()}
+      "update-time": "${timestamp()}"
   }
 }
 '

@@ -102,11 +102,23 @@ resource "null_resource" "create_local_users" {
   count = var.local_users != "" ? 1 : 0
 
   triggers = {
-    users = var.local_users
+    users = join(",", var.local_users)
   }
 
   provisioner "local-exec" {
-    command = "./${data.template_file.user_script.rendered}"
+    command = "./${local_file.script.filename}"
     interpreter = ["sh"]
   }
+}
+
+resource "local_file" "script" {
+    content  = templatefile("${path.module}/files/create_local_users.tmpl", 
+                {
+                  es_user=var.master_user_name,
+                  es_pass=var.master_user_password,
+                  aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
+                  users=var.local_users, 
+                  password="test-passw0rd-123!"
+                })
+    filename = "${path.module}/user-script.sh"
 }

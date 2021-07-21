@@ -1,0 +1,8 @@
+#!/bin/bash
+
+%{ for cluster in clusters }
+  curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${cluster}-000001"
+  curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${cluster}-000001/_aliases/${cluster}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
+  curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${cluster}/_settings" -d '{"opendistro.index_state_management.rollover_alias": "${cluster}" }' -H 'Content-Type: application/json'
+%{ endfor ~}
+

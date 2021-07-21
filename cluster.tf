@@ -152,3 +152,31 @@ resource "local_file" "service_users_script" {
                 })
     filename = "${path.module}/bootstrap-service-script.sh"
 }
+
+resource "null_resource" "create_cluster_indices" {
+  count = var.clusters != "" ? 1 : 0
+
+  triggers = {
+    clusters = join(",", var.clusters)
+  }
+
+  provisioner "local-exec" {
+    command = "./${local_file.cluster_script.filename}"
+    interpreter = ["sh"]
+  }
+
+  depends_on = [
+    aws_elasticsearch_domain.cluster
+  ]
+}
+
+resource "local_file" "cluster_script" {
+    content  = templatefile("${path.module}/files/create_indices.tmpl", 
+                {
+                  es_user=var.master_user_name,
+                  es_pass=var.master_user_password,
+                  aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
+                  clusters=var.clusters
+                })
+    filename = "${path.module}/cluster-index-script.sh"
+}

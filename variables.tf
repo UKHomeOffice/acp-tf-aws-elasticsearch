@@ -58,6 +58,11 @@ variable "admin_users" {
   default = ["alastair", "willem"]
 }
 
+variable "clusters" {
+  description = "group of users to be created in kibana."
+  default = []
+}
+
 variable "logstash_username" {
   description = "Logstash username in Kibana RBAC"
   default = "logstash-acp"

@@ -98,6 +98,12 @@ resource "aws_elasticsearch_domain_policy" "main" {
 POLICIES
 }
 
+resource "time_sleep" "wait_60_seconds" {
+  depends_on = [aws_elasticsearch_domain.cluster]
+
+  create_duration = "60s"
+}
+
 resource "null_resource" "create_local_users" {
   count = var.admin_users != "" ? 1 : 0
 
@@ -111,7 +117,7 @@ resource "null_resource" "create_local_users" {
   }
 
   depends_on = [
-    aws_elasticsearch_domain.cluster
+    time_sleep.wait_60_seconds
   ]
 }
 
@@ -129,12 +135,12 @@ resource "local_file" "script" {
 resource "null_resource" "bootstrap_service_users" {
 
   provisioner "local-exec" {
-    command = "./${local_file.script.filename}"
+    command = "./${local_file.service_users_script.filename}"
     interpreter = ["sh"]
   }
 
   depends_on = [
-    aws_elasticsearch_domain.cluster
+    time_sleep.wait_60_seconds
   ]
 }
 
@@ -166,7 +172,7 @@ resource "null_resource" "create_cluster_indices" {
   }
 
   depends_on = [
-    aws_elasticsearch_domain.cluster
+    time_sleep.wait_60_seconds
   ]
 }
 

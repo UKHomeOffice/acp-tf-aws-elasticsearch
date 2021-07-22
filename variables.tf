@@ -83,7 +83,7 @@ variable "proxy_password" {
 
 variable "proxy_cluster_permissions" {
   description = "Proxy cluster-level permissions"
-  default = "['a', 'b']"
+  default = "[]"
 }
 
 variable "master_user_name" {

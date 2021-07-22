@@ -72,6 +72,11 @@ variable "logstash_password" {
   description = "Logstash password in Kibana RBAC"
 }
 
+variable "logstash_permissions" {
+  description = "Logstash index level permissions"
+  default = "[]"
+}
+
 variable "proxy_username" {
   description = "Proxy username in Kibana RBAC"
   default = "auth-proxy"

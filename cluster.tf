@@ -151,10 +151,11 @@ resource "local_file" "service_users_script" {
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
                   logstash_username=var.logstash_username,
-                  logstash_password=var.logstash_password,
+                  logstash_password=data.aws_kms_secrets.logstash_password.plaintext["password"],
+                  logstash_permissions=var.logstash_permissions,
                   proxy_cluster_permissions=var.proxy_cluster_permissions,
                   proxy_username=var.proxy_username,
-                  proxy_password=var.proxy_password,
+                  proxy_password=data.aws_kms_secrets.proxy_password.plaintext["password"],
                 })
     filename = "${path.module}/bootstrap-service-script.sh"
 }

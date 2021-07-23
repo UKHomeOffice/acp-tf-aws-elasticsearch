@@ -151,24 +151,24 @@ resource "local_file" "service_users_script" {
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
                   logstash_username=var.logstash_username,
-                  logstash_password=data.aws_kms_secrets.logstash_password.plaintext["password"],
+                  logstash_password=var.logstash_password,
                   logstash_permissions=var.logstash_permissions,
                   proxy_cluster_permissions=var.proxy_cluster_permissions,
                   proxy_username=var.proxy_username,
-                  proxy_password=data.aws_kms_secrets.proxy_password.plaintext["password"],
+                  proxy_password=var.proxy_password,
                 })
     filename = "${path.module}/bootstrap-service-script.sh"
 }
 
 resource "null_resource" "create_cluster_indices" {
-  count = var.clusters != "" ? 1 : 0
+  count = var.index_list != "" ? 1 : 0
 
   triggers = {
-    clusters = join(",", var.clusters)
+    index_list = join(",", var.index_list)
   }
 
   provisioner "local-exec" {
-    command = "./${local_file.cluster_script.filename}"
+    command = "./${local_file.indices_script.filename}"
     interpreter = ["sh"]
   }
 
@@ -177,13 +177,19 @@ resource "null_resource" "create_cluster_indices" {
   ]
 }
 
-resource "local_file" "cluster_script" {
+resource "local_file" "indices_script" {
     content  = templatefile("${path.module}/files/create_indices.tmpl", 
                 {
                   es_user=var.master_user_name,
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
-                  clusters=var.clusters
+                  index_list=var.index_list
+                  index_shard_count=var.index_shard_count
+                  index_refresh_interval=var.index_refresh_interval
+                  index_replica_count=var.index_replica_count
+                  index_rollover_size=var.index_rollover_size
+                  index_rollover_age=var.index_rollover_age
+                  index_retention=var.index_retention
                 })
     filename = "${path.module}/cluster-index-script.sh"
 }

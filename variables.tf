@@ -55,12 +55,42 @@ variable "volume_size" {
 
 variable "admin_users" {
   description = "group of users to be created in kibana."
-  default = ["alastair", "willem"]
+  default = []
 }
 
-variable "clusters" {
-  description = "group of users to be created in kibana."
+variable "index_list" {
+  description = "List of indexes to be created in Elasticsearch."
   default = []
+}
+
+variable "index_shard_count" {
+  description = "Updates the index template to define the amount of shards set for all indices."
+  default = "1"
+}
+
+variable "index_refresh_interval" {
+  description = "Updates the index template to define the interval between each index refresh."
+  default = "30s"
+}
+
+variable "index_replica_count" {
+  description = "Updates the index template to define the amount of replica shards set for all indices."
+  default = "1"
+}
+
+variable "index_rollover_size" {
+  description = "Updates the ISM policy with the index size limit before triggering the rollover action."
+  default = "75gb"
+}
+
+variable "index_rollover_age" {
+  description = "Updates the ISM policy with the index age limit before triggering the rollover action."
+  default = "1d"
+}
+
+variable "index_retention" {
+  description = "Updates the ISM policy with the index retention time before being deleted."
+  default = "7d"
 }
 
 variable "logstash_username" {
@@ -74,7 +104,7 @@ variable "logstash_password" {
 
 variable "logstash_permissions" {
   description = "Logstash index level permissions"
-  default = "[]"
+  default = ""
 }
 
 variable "proxy_username" {
@@ -88,7 +118,7 @@ variable "proxy_password" {
 
 variable "proxy_cluster_permissions" {
   description = "Proxy cluster-level permissions"
-  default = "[]"
+  default = ""
 }
 
 variable "master_user_name" {
@@ -108,7 +138,7 @@ variable "subnet_ids" {
 }
 
 variable "sg_ingress_cidr" {
-  default = "10.250.0.0/18"
+  default = ""
 }
 
 variable "create_iam_service_linked_role" {

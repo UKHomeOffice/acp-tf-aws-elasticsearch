@@ -103,7 +103,7 @@ variable "logstash_password" {
 }
 
 variable "logstash_permissions" {
-  description = "Logstash index level permissions. Due to predefined permissions in template, this requires escaped double quotes followed by a trailing comma for JSON object e.g "\"read\","
+  description = "Logstash index level permissions. Due to predefined permissions in template, this requires escaped double quotes followed by a trailing comma for JSON object e.g \"read\","
   default = ""
 }
 

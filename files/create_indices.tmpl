@@ -1,17 +1,6 @@
 #!/bin/bash
 
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/acp-template" -H 'Content-Type: application/json' -d '
-{
-    "index_patterns" : ["*"],
-    "settings" : {
-        "number_of_shards": "${index_shard_count}",
-        "refresh_interval": "${index_refresh_interval}",
-        "number_of_replicas": "${index_replica_count}"
-    }
-}
-'
-
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/acp-ism-policy" -H 'Content-Type: application/json' -d '
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/ism-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
         "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
@@ -48,17 +37,44 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-                "*"
+            %{ for index in index_list }
+            "${index}",
+            %{ endfor ~}
+            "misc-index"
             ]
         }
     }
 }
 '
 
-
 %{ for index in index_list }
-  curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001"
-  curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
-  curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}/_settings" -d '{"opendistro.index_state_management.rollover_alias": "${index}" }' -H 'Content-Type: application/json'
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
+{
+    "index_patterns" : ["${index}-*"],
+    "settings" : {
+        "number_of_shards": "${index_shard_count}",
+        "refresh_interval": "${index_refresh_interval}",
+        "number_of_replicas": "${index_replica_count}",
+        "opendistro.index_state_management.rollover_alias": "${index}"
+    }
+}
+'
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001"
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'
 %{ endfor ~}
 
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/misc-template" -H 'Content-Type: application/json' -d '
+{
+    "index_patterns" : ["misc-index-*"],
+    "settings" : {
+        "number_of_shards": "${index_shard_count}",
+        "refresh_interval": "${index_refresh_interval}",
+        "number_of_replicas": "${index_replica_count}",
+        "opendistro.index_state_management.rollover_alias": "misc-index"
+    }
+}
+'
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/misc-index-000001"
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/misc-index-000001/_aliases/misc-index" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/misc-index" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'

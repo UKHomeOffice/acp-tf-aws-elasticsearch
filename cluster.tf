@@ -105,14 +105,14 @@ resource "time_sleep" "wait_60_seconds" {
 }
 
 resource "null_resource" "create_local_users" {
-  count = var.admin_users != "" ? 1 : 0
+  count = var.admin_users != [] ? 1 : 0
 
   triggers = {
     users = join(",", var.admin_users)
   }
 
   provisioner "local-exec" {
-    command = "./${local_file.script.filename}"
+    command = "./${local_file.script[count.index].filename}"
     interpreter = ["sh"]
   }
 
@@ -122,6 +122,7 @@ resource "null_resource" "create_local_users" {
 }
 
 resource "local_file" "script" {
+    count = var.admin_users != [] ? 1 : 0
     content  = templatefile("${path.module}/files/create_admin_users.tmpl", 
                 {
                   es_user=var.master_user_name,
@@ -161,14 +162,14 @@ resource "local_file" "service_users_script" {
 }
 
 resource "null_resource" "create_cluster_indices" {
-  count = var.index_list != "" ? 1 : 0
+  count = var.index_list != [] ? 1 : 0
 
   triggers = {
     index_list = join(",", var.index_list)
   }
 
   provisioner "local-exec" {
-    command = "./${local_file.indices_script.filename}"
+    command = var.clusters == [] ? "./${local_file.indices_script[count.index].filename}" : "./${local_file.prefixed_indices_script[count.index].filename}" 
     interpreter = ["sh"]
   }
 
@@ -178,12 +179,32 @@ resource "null_resource" "create_cluster_indices" {
 }
 
 resource "local_file" "indices_script" {
+    count = var.clusters == [] ? 1 : 0
     content  = templatefile("${path.module}/files/create_indices.tmpl", 
                 {
                   es_user=var.master_user_name,
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
                   index_list=var.index_list
+                  index_shard_count=var.index_shard_count
+                  index_refresh_interval=var.index_refresh_interval
+                  index_replica_count=var.index_replica_count
+                  index_rollover_size=var.index_rollover_size
+                  index_rollover_age=var.index_rollover_age
+                  index_retention=var.index_retention
+                })
+    filename = "${path.module}/cluster-index-script.sh"
+}
+
+resource "local_file" "prefixed_indices_script" {
+    count    = var.clusters != [] ? 1 : 0
+    content  = templatefile("${path.module}/files/create_prefixed_indices.tmpl", 
+                {
+                  es_user=var.master_user_name,
+                  es_pass=var.master_user_password,
+                  aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
+                  index_list=var.index_list
+                  clusters=var.clusters
                   index_shard_count=var.index_shard_count
                   index_refresh_interval=var.index_refresh_interval
                   index_replica_count=var.index_replica_count

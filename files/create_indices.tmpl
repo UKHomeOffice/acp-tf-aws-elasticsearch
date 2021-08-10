@@ -63,18 +63,3 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-00000
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'
 %{ endfor ~}
-
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/misc-template" -H 'Content-Type: application/json' -d '
-{
-    "index_patterns" : ["misc-index-*"],
-    "settings" : {
-        "number_of_shards": "${index_shard_count}",
-        "refresh_interval": "${index_refresh_interval}",
-        "number_of_replicas": "${index_replica_count}",
-        "opendistro.index_state_management.rollover_alias": "misc-index"
-    }
-}
-'
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/misc-index-000001"
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/misc-index-000001/_aliases/misc-index" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/misc-index" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'

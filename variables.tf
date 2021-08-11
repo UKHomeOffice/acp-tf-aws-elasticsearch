@@ -58,14 +58,9 @@ variable "admin_users" {
   default = []
 }
 
-variable "clusters" {
-  description = "List of cluster names to be appended to index names in Elasticsearch."
-  default = []
-}
-
-variable "index_list" {
-  description = "List of indexes to be created in Elasticsearch."
-  default = []
+variable "indices" {
+  description = "map of clusters/indices to be created in Elasticsearch."
+  default = {}
 }
 
 variable "index_shard_count" {

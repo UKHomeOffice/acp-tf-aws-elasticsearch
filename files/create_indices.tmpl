@@ -37,31 +37,29 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            %{ for cluster, index_list in indices }
             %{ for index in index_list }
-            "${cluster}-${index}",
-            %{ endfor ~} 
+            "${index}",
             %{ endfor ~}
+            "misc-index"
             ]
         }
     }
 }
 '
-%{ for cluster, index_list in indices }
+
 %{ for index in index_list }
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${cluster}-${index}-template" -H 'Content-Type: application/json' -d '
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
 {
-    "index_patterns" : ["${cluster}-${index}-*"],
+    "index_patterns" : ["${index}-*"],
     "settings" : {
         "number_of_shards": "${index_shard_count}",
         "refresh_interval": "${index_refresh_interval}",
         "number_of_replicas": "${index_replica_count}",
-        "opendistro.index_state_management.rollover_alias": "${cluster}-${index}"
+        "opendistro.index_state_management.rollover_alias": "${index}"
     }
 }
 '
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${cluster}-${index}-000001"
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${cluster}-${index}-000001/_aliases/${cluster}-${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${cluster}-${index}" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'
-%{ endfor ~}
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001"
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'
 %{ endfor ~}

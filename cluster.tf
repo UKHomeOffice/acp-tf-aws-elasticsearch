@@ -161,14 +161,15 @@ resource "local_file" "service_users_script" {
     filename = "${path.module}/bootstrap-service-script.sh"
 }
 
-resource "null_resource" "create_cluster_indices" {  
-  for_each = var.indices
+resource "null_resource" "create_cluster_indices" {
+  count = var.index_list != [] ? 1 : 0
+
   triggers = {
-    indices = join(",", each.value)
+    index_list = join(",", var.index_list)
   }
 
   provisioner "local-exec" {
-    command = "./${local_file.indices_script.filename}"
+    command = "./${local_file.indices_script[count.index].filename}"
     interpreter = ["sh"]
   }
 
@@ -178,12 +179,13 @@ resource "null_resource" "create_cluster_indices" {
 }
 
 resource "local_file" "indices_script" {
+    count = var.index_list != [] ? 1 : 0
     content  = templatefile("${path.module}/files/create_indices.tmpl", 
                 {
                   es_user=var.master_user_name,
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
-                  indices=var.indices
+                  index_list=var.index_list
                   index_shard_count=var.index_shard_count
                   index_refresh_interval=var.index_refresh_interval
                   index_replica_count=var.index_replica_count
@@ -192,4 +194,33 @@ resource "local_file" "indices_script" {
                   index_retention=var.index_retention
                 })
     filename = "${path.module}/cluster-index-script.sh"
+}
+
+resource "null_resource" "create_cluster_tenants" {
+  count = var.tenant_list != [] ? 1 : 0
+
+  triggers = {
+    tenant_list = join(",", var.tenant_list)
+  }
+
+  provisioner "local-exec" {
+    command = "./${local_file.tenants_script[count.index].filename}"
+    interpreter = ["sh"]
+  }
+
+  depends_on = [
+    time_sleep.wait_60_seconds
+  ]
+}
+
+resource "local_file" "tenants_script" {
+    count = var.tenant_list != [] ? 1 : 0
+    content  = templatefile("${path.module}/files/create_tenants.tmpl", 
+                {
+                  es_user=var.master_user_name,
+                  es_pass=var.master_user_password,
+                  aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
+                  tenant_list=var.tenant_list
+                })
+    filename = "${path.module}/tenant-script.sh"
 }

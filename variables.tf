@@ -58,8 +58,8 @@ variable "admin_users" {
   default = []
 }
 
-variable "clusters" {
-  description = "List of cluster names to be appended to index names in Elasticsearch."
+variable "tenant_list" {
+  description = "List of tenant names to be provisioned in Elasticsearch."
   default = []
 }
 

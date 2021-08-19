@@ -1,10 +1,10 @@
 #!/bin/bash
 
-%{ if large_index_list }
+%{ if length(large_index_list) != 0 }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/large-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
-        "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
+        "description": "Rollover at ${large_index_rollover_size}GB and ${large_index_rollover_age} day(s) old. Delete at ${large_index_retention} days",
         "default_state": "hot",
         "states": [
         {
@@ -38,7 +38,7 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            ${join(", ", large_index_list)}
+                ${join(", ", formatlist("\"%s\"", large_index_list))}
             ]
         }
     }
@@ -46,11 +46,11 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
 '
 %{ endif }
 
-%{ if medium_index_list }
+%{ if length(medium_index_list) != 0 }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/medium-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
-        "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
+        "description": "Rollover at ${medium_index_rollover_size}GB and ${medium_index_rollover_age} day(s) old. Delete at ${medium_index_retention} days",
         "default_state": "hot",
         "states": [
         {
@@ -84,7 +84,7 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            ${join(", ", medium_index_list)}
+                ${join(", ", formatlist("\"%s\"", medium_index_list))}
             ]
         }
     }
@@ -92,11 +92,11 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
 '
 %{ endif }
 
-%{ if small_index_list }
+%{ if length(small_index_list) != 0 }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/small-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
-        "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
+        "description": "Rollover at ${small_index_rollover_size}GB and ${small_index_rollover_age} day(s) old. Delete at ${small_index_retention} days",
         "default_state": "hot",
         "states": [
         {
@@ -130,7 +130,7 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            ${join(", ", small_index_list)}
+                ${join(", ", formatlist("\"%s\"", small_index_list))}
             ]
         }
     }

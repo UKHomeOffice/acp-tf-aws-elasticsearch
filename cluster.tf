@@ -130,7 +130,7 @@ resource "local_file" "script" {
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
                   admin_users=var.admin_users
                 })
-    filename = "${path.module}/admin-user-script.sh"
+    filename = "${path.module}/${var.domain_name}-admin-user-script.sh"
 }
 
 resource "null_resource" "bootstrap_service_users" {
@@ -158,14 +158,16 @@ resource "local_file" "service_users_script" {
                   proxy_username=var.proxy_username,
                   proxy_password=var.proxy_password,
                 })
-    filename = "${path.module}/bootstrap-service-script.sh"
+    filename = "${path.module}/${var.domain_name}-bootstrap-service-script.sh"
 }
 
 resource "null_resource" "create_cluster_indices" {
-  count = var.index_list != [] ? 1 : 0
+  count = var.large_index_list  != [] || var.medium_index_list  != [] || var.small_index_list != [] ? 1 : 0
 
   triggers = {
-    index_list = join(",", var.index_list)
+    large_index_list = join(",", var.large_index_list)
+    medium_index_list = join(",", var.medium_index_list)
+    small_index_list = join(",", var.small_index_list)
   }
 
   provisioner "local-exec" {
@@ -179,21 +181,38 @@ resource "null_resource" "create_cluster_indices" {
 }
 
 resource "local_file" "indices_script" {
-    count = var.index_list != [] ? 1 : 0
+    count = var.large_index_list  != [] || var.medium_index_list  != [] || var.small_index_list != [] ? 1 : 0
     content  = templatefile("${path.module}/files/create_indices.tmpl", 
                 {
                   es_user=var.master_user_name,
                   es_pass=var.master_user_password,
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
-                  index_list=var.index_list
-                  index_shard_count=var.index_shard_count
-                  index_refresh_interval=var.index_refresh_interval
-                  index_replica_count=var.index_replica_count
-                  index_rollover_size=var.index_rollover_size
-                  index_rollover_age=var.index_rollover_age
-                  index_retention=var.index_retention
+                  large_index_list=var.large_index_list
+                  large_index_shard_count=var.large_index_shard_count
+                  large_index_shard_count=var.large_index_shard_count
+                  large_index_refresh_interval=var.large_index_refresh_interval
+                  large_index_replica_count=var.large_index_replica_count
+                  large_index_rollover_size=var.large_index_rollover_size
+                  large_index_rollover_age=var.large_index_rollover_age
+                  large_index_retention=var.large_index_retention
+                  medium_index_list=var.medium_index_list
+                  medium_index_shard_count=var.medium_index_shard_count
+                  medium_index_shard_count=var.medium_index_shard_count
+                  medium_index_refresh_interval=var.medium_index_refresh_interval
+                  medium_index_replica_count=var.medium_index_replica_count
+                  medium_index_rollover_size=var.medium_index_rollover_size
+                  medium_index_rollover_age=var.medium_index_rollover_age
+                  medium_index_retention=var.medium_index_retention
+                  small_index_list=var.small_index_list
+                  small_index_shard_count=var.small_index_shard_count
+                  small_index_shard_count=var.small_index_shard_count
+                  small_index_refresh_interval=var.small_index_refresh_interval
+                  small_index_replica_count=var.small_index_replica_count
+                  small_index_rollover_size=var.small_index_rollover_size
+                  small_index_rollover_age=var.small_index_rollover_age
+                  small_index_retention=var.small_index_retention
                 })
-    filename = "${path.module}/cluster-index-script.sh"
+    filename = "${path.module}/${var.domain_name}-cluster-index-script.sh"
 }
 
 resource "null_resource" "create_cluster_tenants" {
@@ -222,5 +241,5 @@ resource "local_file" "tenants_script" {
                   aws_es_endpoint=aws_elasticsearch_domain.cluster.endpoint,
                   tenant_list=var.tenant_list
                 })
-    filename = "${path.module}/tenant-script.sh"
+    filename = "${path.module}/${var.domain_name}-tenant-script.sh"
 }

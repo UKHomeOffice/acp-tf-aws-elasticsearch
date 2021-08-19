@@ -1,5 +1,6 @@
 #!/bin/bash
 
+%{ if large_index_list }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/large-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
@@ -37,15 +38,15 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            %{ for index in large_index_list }
-            "${index}",
-            %{ endfor ~}
-            ""
+            ${join(", ", large_index_list)}
             ]
         }
     }
 }
 '
+%{ endif }
+
+%{ if medium_index_list }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/medium-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
@@ -83,16 +84,15 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            %{ for index in medium_index_list }
-            "${index}",
-            %{ endfor ~}
-            ""
+            ${join(", ", medium_index_list)}
             ]
         }
     }
 }
 '
+%{ endif }
 
+%{ if small_index_list }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/small-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
@@ -130,15 +130,13 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            %{ for index in small_index_list }
-            "${index}",
-            %{ endfor ~}
-            ""
+            ${join(", ", small_index_list)}
             ]
         }
     }
 }
 '
+%{ endif }
 
 %{ for index in large_index_list }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '

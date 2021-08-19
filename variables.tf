@@ -63,37 +63,107 @@ variable "tenant_list" {
   default = []
 }
 
-variable "index_list" {
-  description = "List of indexes to be created in Elasticsearch."
+variable "large_index_list" {
+  description = "List of larger sized indexes to be created in Elasticsearch. e.g expected 1TB per day"
   default = []
 }
 
-variable "index_shard_count" {
-  description = "Updates the index template to define the amount of shards set for all indices."
-  default = "1"
+variable "large_index_shard_count" {
+  description = "Updates the large index template to define the amount of shards set for all indices."
+  default = "12"
 }
 
-variable "index_refresh_interval" {
-  description = "Updates the index template to define the interval between each index refresh."
+variable "large_index_refresh_interval" {
+  description = "Updates the large index template to define the interval between each index refresh."
   default = "30s"
 }
 
-variable "index_replica_count" {
-  description = "Updates the index template to define the amount of replica shards set for all indices."
+variable "large_index_replica_count" {
+  description = "Updates the large index template to define the amount of replica shards set for all indices."
   default = "1"
 }
 
-variable "index_rollover_size" {
-  description = "Updates the ISM policy with the index size limit before triggering the rollover action."
-  default = "75gb"
+variable "large_index_rollover_size" {
+  description = "Updates the large ISM policy with the index size limit before triggering the rollover action."
+  default = "600gb"
 }
 
-variable "index_rollover_age" {
-  description = "Updates the ISM policy with the index age limit before triggering the rollover action."
+variable "large_index_rollover_age" {
+  description = "Updates the large ISM policy with the index age limit before triggering the rollover action."
   default = "1d"
 }
 
-variable "index_retention" {
+variable "large_index_retention" {
+  description = "Updates the ISM policy with the index retention time before being deleted."
+  default = "7d"
+}
+
+variable "medium_index_list" {
+  description = "List of medium sized indexes to be created in Elasticsearch. e.g 30GB per day"
+  default = []
+}
+
+variable "medium_index_shard_count" {
+  description = "Updates the medium index template to define the amount of shards set for all indices."
+  default = "6"
+}
+
+variable "medium_index_refresh_interval" {
+  description = "Updates the medium index template to define the interval between each index refresh."
+  default = "30s"
+}
+
+variable "medium_index_replica_count" {
+  description = "Updates the medium index template to define the amount of replica shards set for all indices."
+  default = "1"
+}
+
+variable "medium_index_rollover_size" {
+  description = "Updates the medium ISM policy with the index size limit before triggering the rollover action."
+  default = "60gb"
+}
+
+variable "medium_index_rollover_age" {
+  description = "Updates the medium ISM policy with the index age limit before triggering the rollover action."
+  default = "1d"
+}
+
+variable "medium_index_retention" {
+  description = "Updates the medium ISM policy with the index retention time before being deleted."
+  default = "7d"
+}
+
+variable "small_index_list" {
+  description = "List of small sized indexes to be created in Elasticsearch. e.g expected 5GB per day"
+  default = []
+}
+
+variable "small_index_shard_count" {
+  description = "Updates the small index template to define the amount of shards set for all indices."
+  default = "1"
+}
+
+variable "small_index_refresh_interval" {
+  description = "Updates the small index template to define the interval between each index refresh."
+  default = "30s"
+}
+
+variable "small_index_replica_count" {
+  description = "Updates the small index template to define the amount of replica shards set for all indices."
+  default = "1"
+}
+
+variable "small_index_rollover_size" {
+  description = "Updates the small ISM policy with the index size limit before triggering the rollover action."
+  default = "5gb"
+}
+
+variable "small_index_rollover_age" {
+  description = "Updates the small ISM policy with the index age limit before triggering the rollover action."
+  default = "1d"
+}
+
+variable "small_index_retention" {
   description = "Updates the ISM policy with the index retention time before being deleted."
   default = "7d"
 }

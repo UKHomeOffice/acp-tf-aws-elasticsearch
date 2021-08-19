@@ -1,6 +1,6 @@
 #!/bin/bash
 
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/ism-policy" -H 'Content-Type: application/json' -d '
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/large-index-policy" -H 'Content-Type: application/json' -d '
 {
     "policy": {
         "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
@@ -11,8 +11,8 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
             "actions": [
                 {
                     "rollover": {
-                        "min_size": "${index_rollover_size}",
-                        "min_index_age": "${index_rollover_age}"
+                        "min_size": "${large_index_rollover_size}",
+                        "min_index_age": "${large_index_rollover_age}"
                     }
                 }
             ],
@@ -20,7 +20,7 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
                 {
                     "state_name": "delete",
                     "conditions": {
-                        "min_index_age": "${index_retention}"
+                        "min_index_age": "${large_index_retention}"
                     }
                 }
             ]
@@ -37,29 +37,156 @@ curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_i
     ],
         "ism_template": {
             "index_patterns": [
-            %{ for index in index_list }
+            %{ for index in large_index_list }
             "${index}",
             %{ endfor ~}
-            "misc-index"
+            ""
+            ]
+        }
+    }
+}
+'
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/medium-index-policy" -H 'Content-Type: application/json' -d '
+{
+    "policy": {
+        "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
+        "default_state": "hot",
+        "states": [
+        {
+            "name": "hot",
+            "actions": [
+                {
+                    "rollover": {
+                        "min_size": "${medium_index_rollover_size}",
+                        "min_index_age": "${medium_index_rollover_age}"
+                    }
+                }
+            ],
+            "transitions": [
+                {
+                    "state_name": "delete",
+                    "conditions": {
+                        "min_index_age": "${medium_index_retention}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "delete",
+            "actions": [
+                {
+                    "delete": {}
+                }
+            ],
+            "transitions": []
+        }
+    ],
+        "ism_template": {
+            "index_patterns": [
+            %{ for index in medium_index_list }
+            "${index}",
+            %{ endfor ~}
+            ""
             ]
         }
     }
 }
 '
 
-%{ for index in index_list }
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/policies/small-index-policy" -H 'Content-Type: application/json' -d '
+{
+    "policy": {
+        "description": "ism policy to rollover/delete indices breaching a certain size or time. rollover defaults to 75GB and 1 day old. Delete defaults  to 7 days",
+        "default_state": "hot",
+        "states": [
+        {
+            "name": "hot",
+            "actions": [
+                {
+                    "rollover": {
+                        "min_size": "${small_index_rollover_size}",
+                        "min_index_age": "${small_index_rollover_age}"
+                    }
+                }
+            ],
+            "transitions": [
+                {
+                    "state_name": "delete",
+                    "conditions": {
+                        "min_index_age": "${small_index_retention}"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "delete",
+            "actions": [
+                {
+                    "delete": {}
+                }
+            ],
+            "transitions": []
+        }
+    ],
+        "ism_template": {
+            "index_patterns": [
+            %{ for index in small_index_list }
+            "${index}",
+            %{ endfor ~}
+            ""
+            ]
+        }
+    }
+}
+'
+
+%{ for index in large_index_list }
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
 {
     "index_patterns" : ["${index}-*"],
     "settings" : {
-        "number_of_shards": "${index_shard_count}",
-        "refresh_interval": "${index_refresh_interval}",
-        "number_of_replicas": "${index_replica_count}",
+        "number_of_shards": "${large_index_shard_count}",
+        "refresh_interval": "${large_index_refresh_interval}",
+        "number_of_replicas": "${large_index_replica_count}",
         "opendistro.index_state_management.rollover_alias": "${index}"
     }
 }
 '
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "ism-policy"}'  -H 'Content-Type: application/json'
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "large-index-policy"}'  -H 'Content-Type: application/json'
+%{ endfor ~}
+
+%{ for index in medium_index_list }
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
+{
+    "index_patterns" : ["${index}-*"],
+    "settings" : {
+        "number_of_shards": "${medium_index_shard_count}",
+        "refresh_interval": "${medium_index_refresh_interval}",
+        "number_of_replicas": "${medium_index_replica_count}",
+        "opendistro.index_state_management.rollover_alias": "${index}"
+    }
+}
+'
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001"
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "medium-index-policy"}'  -H 'Content-Type: application/json'
+%{ endfor ~}
+
+%{ for index in small_index_list }
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
+{
+    "index_patterns" : ["${index}-*"],
+    "settings" : {
+        "number_of_shards": "${small_index_shard_count}",
+        "refresh_interval": "${small_index_refresh_interval}",
+        "number_of_replicas": "${small_index_replica_count}",
+        "opendistro.index_state_management.rollover_alias": "${index}"
+    }
+}
+'
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001"
+curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "small-index-policy"}'  -H 'Content-Type: application/json'
 %{ endfor ~}

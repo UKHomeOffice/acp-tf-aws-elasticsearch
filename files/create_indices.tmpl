@@ -158,7 +158,7 @@ curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.kibana/_doc/
   "type" : "index-pattern",
   "index-pattern" : {
     "title": "${index}-*",
-    "timeFieldName": "timestamp"
+    "timeFieldName": "@timestamp"
   }
 }
 '
@@ -184,7 +184,7 @@ curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.kibana/_doc/
   "type" : "index-pattern",
   "index-pattern" : {
     "title": "${index}-*",
-    "timeFieldName": "timestamp"
+    "timeFieldName": "@timestamp"
   }
 }
 '
@@ -210,7 +210,7 @@ curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.kibana/_doc/
   "type" : "index-pattern",
   "index-pattern" : {
     "title": "${index}-*",
-    "timeFieldName": "timestamp"
+    "timeFieldName": "@timestamp"
   }
 }
 '

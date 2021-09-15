@@ -120,7 +120,7 @@ variable "medium_index_replica_count" {
 
 variable "medium_index_rollover_size" {
   description = "Updates the medium ISM policy with the index size limit before triggering the rollover action."
-  default = "60gb"
+  default = "300gb"
 }
 
 variable "medium_index_rollover_age" {
@@ -155,7 +155,7 @@ variable "small_index_replica_count" {
 
 variable "small_index_rollover_size" {
   description = "Updates the small ISM policy with the index size limit before triggering the rollover action."
-  default = "5gb"
+  default = "30gb"
 }
 
 variable "small_index_rollover_age" {

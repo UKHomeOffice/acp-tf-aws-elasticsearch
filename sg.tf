@@ -8,8 +8,6 @@ resource "aws_security_group" "es" {
     to_port   = 443
     protocol  = "tcp"
 
-    cidr_blocks = [
-      var.sg_ingress_cidr
-    ]
+    cidr_blocks = var.sg_ingress_cidr_blocks
   }
 }

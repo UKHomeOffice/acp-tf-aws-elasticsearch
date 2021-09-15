@@ -212,8 +212,8 @@ variable "subnet_ids" {
   
 }
 
-variable "sg_ingress_cidr" {
-  default = ""
+variable "sg_ingress_cidr_blocks" {
+  default = []
 }
 
 variable "create_iam_service_linked_role" {

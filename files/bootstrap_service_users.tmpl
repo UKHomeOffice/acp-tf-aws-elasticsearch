@@ -1,6 +1,6 @@
 #!/bin/bash
 
-%{ if logstash_username and logstash_password }
+%{ if logstash_username != "" and if logstash_password != "" }
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${logstash_username}' -H 'Content-Type: application/json' -d '
 {
   "cluster_permissions": [
@@ -35,18 +35,20 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
 '
 %{ endif ~}
 
-%{ if proxy_username and proxy_password }
+%{ if proxy_username != "" and if proxy_password != "" }
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${proxy_username}' -H 'Content-Type: application/json' -d '
 {
   "cluster_permissions": [
-    ${proxy_cluster_permissions}
+    ${join(", ", formatlist("\"%s\"", proxy_cluster_permissions))}
     ],
   "index_permissions": [{
-      "index_patterns": [],
+      "index_patterns": ["*"],
       "dls": "",
       "fls": [],
       "masked_fields": [],
-      "allowed_actions": []
+      "allowed_actions": [
+        ${join(", ", formatlist("\"%s\"", proxy_index_permissions))}
+      ]
   }],
   "tenant_permissions": [{
       "tenant_patterns": [],

@@ -1,6 +1,7 @@
 #!/bin/bash
 
-%{ if logstash_username != "" && if logstash_password != "" }
+%{ if logstash_username != "" }
+%{ if logstash_password != "" }
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${logstash_username}' -H 'Content-Type: application/json' -d '
 {
   "cluster_permissions": [
@@ -34,8 +35,10 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
 }
 '
 %{ endif ~}
+%{ endif ~}
 
-%{ if proxy_username != "" && if proxy_password != "" }
+%{ if proxy_username != "" }
+%{ if proxy_password != "" }
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${proxy_username}' -H 'Content-Type: application/json' -d '
 {
   "cluster_permissions": [
@@ -68,4 +71,5 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
   }
 }
 '
+%{ endif ~}
 %{ endif ~}

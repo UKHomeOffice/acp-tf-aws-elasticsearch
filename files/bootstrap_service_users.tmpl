@@ -3,13 +3,7 @@
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${logstash_username}' -H 'Content-Type: application/json' -d '
 {
   "cluster_permissions": [
-    "cluster:admin/ingest/pipeline/get",
-    "cluster:admin/ingest/pipeline/put",
-    "cluster_monitor",
-    "indices:data/write/bulk",
-    "indices:data/write/bulk*",
-    "indices:data/write/index",
-    "indices:admin/mapping/put"
+    ${join(", ", formatlist("\"%s\"", logstash_cluster_permissions))}
   ],
   "index_permissions": [{
       "index_patterns": ["*"],
@@ -17,15 +11,7 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
       "fls": [],
       "masked_fields": [],
       "allowed_actions": [
-        ${logstash_permissions}
-        "read",
-        "get",
-        "indices:data/write/bulk",
-        "indices:data/write/bulk*",
-        "indices:data/write/index",
-        "indices:admin/mapping/put",
-        "indices:monitor/settings/get",
-        "indices:monitor/stats"
+        ${join(", ", formatlist("\"%s\"", logstash_index_permissions))}
       ]
   }],
   "tenant_permissions": [{
@@ -47,6 +33,7 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
 }
 '
 
+%{ if proxy_user_toggle }
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${proxy_username}' -H 'Content-Type: application/json' -d '
 {
   "cluster_permissions": [
@@ -76,4 +63,5 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
       "update-time": "${timestamp()}"
   }
 }
-' 
+'
+%{ endif ~}

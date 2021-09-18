@@ -170,11 +170,12 @@ variable "small_index_retention" {
 
 variable "logstash_username" {
   description = "Logstash username in Kibana RBAC"
-  default     = "_logstash-acp"
+  default     = ""
 }
 
 variable "logstash_password" {
   description = "Logstash password in Kibana RBAC"
+  default = ""
 }
 
 variable "logstash_index_permissions" {
@@ -204,15 +205,9 @@ variable "logstash_cluster_permissions" {
   ]
 }
 
-variable "proxy_user_toggle" {
-  description = "Toggle whether or not to create the proxy user"
-  default     = false
-}
-
-
 variable "proxy_username" {
   description = "Proxy username in Kibana RBAC"
-  default     = "_auth-proxy"
+  default     = ""
 }
 
 variable "proxy_password" {
@@ -225,7 +220,7 @@ variable "proxy_cluster_permissions" {
   default     = []
 }
 
-variable "proxy_cluster_permissions" {
+variable "proxy_index_permissions" {
   description = "Proxy index-level permissions"
   default     = []
 }

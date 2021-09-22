@@ -133,6 +133,10 @@ resource "null_resource" "admin_file" {
 }
 
 resource "null_resource" "bootstrap_service_users" {
+  triggers = {
+    logstash_username = var.logstash_username
+    proxy_username = var.proxy_username
+  }
   provisioner "local-exec" {
     command     = "./${path.module}/${var.domain_name}-bootstrap-service-script.sh"
     interpreter = ["sh"]

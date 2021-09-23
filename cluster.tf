@@ -104,21 +104,7 @@ resource "time_sleep" "wait_60_seconds" {
   create_duration = "60s"
 }
 
-resource "null_resource" "create_local_users" {
-  count = var.admin_users != [] ? 1 : 0
-  triggers = {
-    users = join(",", var.admin_users)
-  }
-  provisioner "local-exec" {
-    command     = "./${path.module}/${var.domain_name}-admin-user-script.sh"
-    interpreter = ["sh"]
-  }
-  depends_on = [
-    time_sleep.wait_60_seconds
-  ]
-}
-
-resource "null_resource" "admin_file" {
+resource "null_resource" "create_admin_user_script" {
   count = var.admin_users != [] ? 1 : 0
   triggers = {
     admin_users = join(",", var.admin_users)
@@ -130,23 +116,26 @@ resource "null_resource" "admin_file" {
       local.admin_content
     )
   }
-}
-
-resource "null_resource" "bootstrap_service_users" {
-  triggers = {
-    logstash_username = var.logstash_username
-    proxy_username = var.proxy_username
-  }
-  provisioner "local-exec" {
-    command     = "./${path.module}/${var.domain_name}-bootstrap-service-script.sh"
-    interpreter = ["sh"]
-  }
   depends_on = [
     time_sleep.wait_60_seconds
   ]
 }
 
-resource "null_resource" "service_user_file" {
+resource "null_resource" "exec_admin_user_script" {
+  count = var.admin_users != [] ? 1 : 0
+  triggers = {
+    users = join(",", var.admin_users)
+  }
+  provisioner "local-exec" {
+    command     = "./${path.module}/${var.domain_name}-admin-user-script.sh"
+    interpreter = ["sh"]
+  }
+  depends_on = [
+    null_resource.create_admin_user_script
+  ]
+}
+
+resource "null_resource" "create_service_user_file" {
   triggers = {
     logstash_username = var.logstash_username
     proxy_username = var.proxy_username
@@ -158,25 +147,26 @@ resource "null_resource" "service_user_file" {
       local.service_user_content
     )
   }
-}
-
-resource "null_resource" "create_cluster_indices" {
-  count = var.large_index_list != [] || var.medium_index_list != [] || var.small_index_list != [] ? 1 : 0
-  triggers = {
-    large_index_list  = join(",", var.large_index_list)
-    medium_index_list = join(",", var.medium_index_list)
-    small_index_list  = join(",", var.small_index_list)
-  }
-  provisioner "local-exec" {
-    command     = "./${path.module}/${var.domain_name}-cluster-index-script.sh"
-    interpreter = ["sh"]
-  }
   depends_on = [
     time_sleep.wait_60_seconds
   ]
 }
 
-resource "null_resource" "indices_file" {
+resource "null_resource" "exec_service_user_file" {
+  triggers = {
+    logstash_username = var.logstash_username
+    proxy_username = var.proxy_username
+  }
+  provisioner "local-exec" {
+    command     = "./${path.module}/${var.domain_name}-bootstrap-service-script.sh"
+    interpreter = ["sh"]
+  }
+  depends_on = [
+    null_resource.create_service_user_file
+  ]
+}
+
+resource "null_resource" "create_cluster_indices_file" {
   count = var.large_index_list != [] || var.medium_index_list != [] || var.small_index_list != [] ? 1 : 0
   triggers = {
     template = local.index_content
@@ -188,23 +178,28 @@ resource "null_resource" "indices_file" {
       local.index_content
     )
   }
-}
-
-resource "null_resource" "create_cluster_tenants" {
-  count = var.tenant_list != [] ? 1 : 0
-  triggers = {
-    tenant_list = join(",", var.tenant_list)
-  }
-  provisioner "local-exec" {
-    command     = "./${path.module}/${var.domain_name}-tenant-script.sh"
-    interpreter = ["sh"]
-  }
   depends_on = [
     time_sleep.wait_60_seconds
   ]
 }
 
-resource "null_resource" "tenant_file" {
+resource "null_resource" "exec_cluster_indices_file" {
+  count = var.large_index_list != [] || var.medium_index_list != [] || var.small_index_list != [] ? 1 : 0
+  triggers = {
+    large_index_list  = join(",", var.large_index_list)
+    medium_index_list = join(",", var.medium_index_list)
+    small_index_list  = join(",", var.small_index_list)
+  }
+  provisioner "local-exec" {
+    command     = "./${path.module}/${var.domain_name}-cluster-index-script.sh"
+    interpreter = ["sh"]
+  }
+  depends_on = [
+    null_resource.create_cluster_indices_file
+  ]
+}
+
+resource "null_resource" "create_cluster_tenant_file" {
   count = var.tenant_list != [] ? 1 : 0
   triggers = {
     template = local.tenant_content
@@ -216,4 +211,21 @@ resource "null_resource" "tenant_file" {
       local.tenant_content
     )
   }
+  depends_on = [
+    time_sleep.wait_60_seconds
+  ]
+}
+
+resource "null_resource" "exec_cluster_tenant_file" {
+  count = var.tenant_list != [] ? 1 : 0
+  triggers = {
+    tenant_list = join(",", var.tenant_list)
+  }
+  provisioner "local-exec" {
+    command     = "./${path.module}/${var.domain_name}-tenant-script.sh"
+    interpreter = ["sh"]
+  }
+  depends_on = [
+    null_resource.create_cluster_tenant_file
+  ]
 }

@@ -215,17 +215,6 @@ variable "proxy_password" {
   default     = ""
 }
 
-variable "proxy_cluster_permissions" {
-  description = "Proxy cluster-level permissions"
-  default     = []
-}
-
-variable "proxy_index_permissions" {
-  description = "Proxy index-level permissions"
-  default     = []
-}
-
-
 variable "master_user_name" {
 
 }

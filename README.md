@@ -1,4 +1,3 @@
-# acp-tf-aws-elasticsearch
 ## Requirements
 
 No requirements.
@@ -8,7 +7,6 @@ No requirements.
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | n/a |
-| <a name="provider_local"></a> [local](#provider\_local) | n/a |
 | <a name="provider_null"></a> [null](#provider\_null) | n/a |
 | <a name="provider_time"></a> [time](#provider\_time) | n/a |
 
@@ -26,14 +24,14 @@ No modules.
 | [aws_elasticsearch_domain_policy.main](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticsearch_domain_policy) | resource |
 | [aws_iam_service_linked_role.es](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_service_linked_role) | resource |
 | [aws_security_group.es](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
-| [local_file.indices_script](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [local_file.script](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [local_file.service_users_script](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [local_file.tenants_script](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [null_resource.bootstrap_service_users](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.create_cluster_indices](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.create_cluster_tenants](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
-| [null_resource.create_local_users](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.create_admin_user_script](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.create_cluster_indices_file](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.create_cluster_tenant_file](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.create_service_user_file](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.exec_admin_user_script](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.exec_cluster_indices_file](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.exec_cluster_tenant_file](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
+| [null_resource.exec_service_user_file](https://registry.terraform.io/providers/hashicorp/null/latest/docs/resources/resource) | resource |
 | [time_sleep.wait_60_seconds](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 
 ## Inputs
@@ -72,8 +70,6 @@ No modules.
 | <a name="input_medium_index_rollover_age"></a> [medium\_index\_rollover\_age](#input\_medium\_index\_rollover\_age) | Updates the medium ISM policy with the index age limit before triggering the rollover action. | `string` | `"1d"` | no |
 | <a name="input_medium_index_rollover_size"></a> [medium\_index\_rollover\_size](#input\_medium\_index\_rollover\_size) | Updates the medium ISM policy with the index size limit before triggering the rollover action. | `string` | `"300gb"` | no |
 | <a name="input_medium_index_shard_count"></a> [medium\_index\_shard\_count](#input\_medium\_index\_shard\_count) | Updates the medium index template to define the amount of shards set for all indices. | `string` | `"6"` | no |
-| <a name="input_proxy_cluster_permissions"></a> [proxy\_cluster\_permissions](#input\_proxy\_cluster\_permissions) | Proxy cluster-level permissions | `list` | `[]` | no |
-| <a name="input_proxy_index_permissions"></a> [proxy\_index\_permissions](#input\_proxy\_index\_permissions) | Proxy index-level permissions | `list` | `[]` | no |
 | <a name="input_proxy_password"></a> [proxy\_password](#input\_proxy\_password) | Proxy password in Kibana RBAC | `string` | `""` | no |
 | <a name="input_proxy_username"></a> [proxy\_username](#input\_proxy\_username) | Proxy username in Kibana RBAC | `string` | `""` | no |
 | <a name="input_sg_ingress_cidr_blocks"></a> [sg\_ingress\_cidr\_blocks](#input\_sg\_ingress\_cidr\_blocks) | n/a | `list` | `[]` | no |

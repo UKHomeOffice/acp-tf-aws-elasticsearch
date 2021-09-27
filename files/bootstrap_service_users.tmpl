@@ -39,31 +39,10 @@ curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_s
 
 %{ if proxy_username != "" }
 %{ if proxy_password != "" }
-curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/roles/${proxy_username}' -H 'Content-Type: application/json' -d '
-{
-  "cluster_permissions": [
-    ${join(", ", formatlist("\"%s\"", proxy_cluster_permissions))}
-    ],
-  "index_permissions": [{
-      "index_patterns": ["*"],
-      "dls": "",
-      "fls": [],
-      "masked_fields": [],
-      "allowed_actions": [
-        ${join(", ", formatlist("\"%s\"", proxy_index_permissions))}
-      ]
-  }],
-  "tenant_permissions": [{
-      "tenant_patterns": [],
-      "allowed_actions": []
-  }]
-}
-' 
-
 curl -XPUT -u '${es_user}:${es_pass}' 'https://${aws_es_endpoint}/_opendistro/_security/api/user/${proxy_username}' -H 'Content-Type: application/json' -d '
 {
   "password": "${proxy_password}",
-  "opendistro_security_roles": ["${proxy_username}"],
+  "opendistro_security_roles": ["security_manager"],
   "backend_roles": [],
   "attributes": {
       "creation-mechanism": "tf-bootstrap-script",

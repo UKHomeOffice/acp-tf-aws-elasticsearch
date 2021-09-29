@@ -24,8 +24,6 @@ locals {
       logstash_index_permissions   = var.logstash_index_permissions
       proxy_username               = var.proxy_username
       proxy_password               = var.proxy_password
-      proxy_cluster_permissions    = var.proxy_cluster_permissions
-      proxy_index_permissions      = var.proxy_index_permissions
     })
     index_content = templatefile("${path.module}/files/create_indices.tmpl",
     {

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 %{ for user in admin_users }
-curl -XPUT -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${user}" -H 'Content-Type: application/json' -d '
+ES_PASSWORD=$(aws kms decrypt --key-id ${kms_key_id} --ciphertext-blob ${encrypted_password_payload} --region eu-west-2 | jq '.Plaintext' -r | base64 -d) 
+curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${user}" -H 'Content-Type: application/json' -d '
 { 
   "password" : "A${substr(sha1(user), 0, 10)}@",
   "opendistro_security_roles": ["all_access"],

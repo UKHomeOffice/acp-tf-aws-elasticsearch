@@ -98,6 +98,11 @@ variable "large_index_retention" {
   default     = "7d"
 }
 
+variable "large_index_field_limit" {
+  description = "Large indices are likely to breach the default 1000 limit for elasticsearch fields, this set the updated limit in the index template."
+  default     = "2000"
+}
+
 variable "medium_index_list" {
   description = "List of medium sized indexes to be created in Elasticsearch. e.g 30GB per day"
   default     = []
@@ -215,12 +220,30 @@ variable "proxy_password" {
   default     = ""
 }
 
+variable "kibana_username" {
+  description = "Kibana username in Kibana RBAC"
+  default     = ""
+}
+
+variable "kibana_password" {
+  description = "Kibana password in Kibana RBAC"
+  default     = ""
+}
+
 variable "master_user_name" {
 
 }
 
 variable "master_user_password" {
   description = "The master user password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+}
+
+variable "kms_key_alias" {
+  description = "The alias of the kms key required to decrypt the encrypted payload and render files for booscripts. This populates a data source to find th required key."
+}
+
+variable "encrypted_password_payload" {
+  description = "The encrypted payload containing the password, this is required to decrypt dynamically to redact the value within console outputs."
 }
 
 variable "vpc_id" {

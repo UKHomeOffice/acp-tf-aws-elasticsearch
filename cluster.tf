@@ -139,6 +139,7 @@ resource "null_resource" "create_service_user_file" {
   triggers = {
     logstash_username = var.logstash_username
     proxy_username = var.proxy_username
+    kibana_username = var.kibana_username
   }
   provisioner "local-exec" {
     command = format(
@@ -156,6 +157,7 @@ resource "null_resource" "exec_service_user_file" {
   triggers = {
     logstash_username = var.logstash_username
     proxy_username = var.proxy_username
+    kibana_username = var.kibana_username
   }
   provisioner "local-exec" {
     command     = "./${path.module}/${var.domain_name}-bootstrap-service-script.sh"

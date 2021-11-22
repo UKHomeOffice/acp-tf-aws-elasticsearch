@@ -1,5 +1,6 @@
 #!/bin/bash
-ES_PASSWORD=$(aws kms decrypt --key-id ${kms_key_id} --ciphertext-blob fileb://<(echo ${encrypted_password_payload} | base64 -d) --query Plaintext --output text | base64 -d)
+echo ${encrypted_password_payload} | base64 -d > encrypted-file
+ES_PASSWORD=$(aws kms decrypt --key-id ${kms_key_id} --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
 %{ if length(large_index_list) != 0 }
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/policies/large-index-policy" -H 'Content-Type: application/json' -d '
 {

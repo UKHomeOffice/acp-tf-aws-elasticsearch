@@ -2,7 +2,7 @@
 
 %{ for user in admin_users }
 echo ${encrypted_password_payload} | base64 -d > encrypted-file
-ES_PASSWORD=$(aws kms decrypt --key-id ${kms_key_id} --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
+ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${user}" -H 'Content-Type: application/json' -d '
 { 
   "password" : "A${substr(sha1(user), 0, 10)}@",

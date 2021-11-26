@@ -188,15 +188,18 @@ resource "null_resource" "create_cluster_indices_file" {
 resource "null_resource" "exec_cluster_indices_file" {
   count = var.large_index_list != [] || var.medium_index_list != [] || var.small_index_list != [] ? 1 : 0
   triggers = {
-    large_index_shard_count    = var.large_index_shard_count
-    medium_index_shard_count   = var.medium_index_shard_count
-    small_index_shard_count    = var.small_index_shard_count
-    large_index_replica_count  = var.large_index_replica_count
-    medium_index_replica_count = var.medium_index_replica_count
-    small_index_replica_count  = var.small_index_replica_count
-    large_index_list           = join(",", var.large_index_list)
-    medium_index_list          = join(",", var.medium_index_list)
-    small_index_list           = join(",", var.small_index_list)
+    large_index_refresh_interval  = var.large_index_refresh_interval
+    medium_index_refresh_interval = var.medium_index_refresh_interval
+    small_index_refresh_interval  = var.small_index_refresh_interval
+    large_index_shard_count       = var.large_index_shard_count
+    medium_index_shard_count      = var.medium_index_shard_count
+    small_index_shard_count       = var.small_index_shard_count
+    large_index_replica_count     = var.large_index_replica_count
+    medium_index_replica_count    = var.medium_index_replica_count
+    small_index_replica_count     = var.small_index_replica_count
+    large_index_list              = join(",", var.large_index_list)
+    medium_index_list             = join(",", var.medium_index_list)
+    small_index_list              = join(",", var.small_index_list)
   }
   provisioner "local-exec" {
     command     = "./${path.module}/${var.domain_name}-cluster-index-script.sh"

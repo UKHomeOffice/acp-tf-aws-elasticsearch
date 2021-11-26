@@ -75,7 +75,7 @@ variable "large_index_shard_count" {
 
 variable "large_index_refresh_interval" {
   description = "Updates the large index template to define the interval between each index refresh."
-  default     = "30s"
+  default     = "60s"
 }
 
 variable "large_index_replica_count" {
@@ -115,7 +115,7 @@ variable "medium_index_shard_count" {
 
 variable "medium_index_refresh_interval" {
   description = "Updates the medium index template to define the interval between each index refresh."
-  default     = "30s"
+  default     = "60s"
 }
 
 variable "medium_index_replica_count" {
@@ -150,7 +150,7 @@ variable "small_index_shard_count" {
 
 variable "small_index_refresh_interval" {
   description = "Updates the small index template to define the interval between each index refresh."
-  default     = "30s"
+  default     = "60s"
 }
 
 variable "small_index_replica_count" {

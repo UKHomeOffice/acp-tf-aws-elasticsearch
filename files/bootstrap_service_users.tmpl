@@ -74,3 +74,27 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 '
 %{ endif ~}
 %{ endif ~}
+
+
+%{ if visualization_role != false }
+echo ${encrypted_password_payload} | base64 -d > encrypted-file
+ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
+curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/roles/acp-visualization" -H 'Content-Type: application/json' -d '
+{
+  "cluster_permissions": [],
+  "index_permissions": [{
+      "index_patterns": [".kibana*"],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": [
+        "crud"
+      ]
+  }],
+  "tenant_permissions": [{
+      "tenant_patterns": [],
+      "allowed_actions": []
+  }]
+}
+'
+%{ endif ~}

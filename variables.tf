@@ -231,7 +231,7 @@ variable "kibana_password" {
 }
 
 variable "visualization_role" {
-  description = "Boolean to create role with the ability to create visulizations and dashboards."
+  description = "Boolean to create role with the ability to create visualizations and dashboards."
   default     = true
 }
 

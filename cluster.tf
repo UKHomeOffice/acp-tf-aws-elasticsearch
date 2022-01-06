@@ -140,6 +140,7 @@ resource "null_resource" "create_service_user_file" {
     logstash_username = var.logstash_username
     proxy_username = var.proxy_username
     kibana_username = var.kibana_username
+    visualization_role = var.visualization_role
   }
   provisioner "local-exec" {
     command = format(

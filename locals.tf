@@ -30,6 +30,7 @@ locals {
       proxy_password               = var.proxy_password
       kibana_username              = var.kibana_username
       kibana_password              = var.kibana_password
+      visualization_role           = var.visualization_role
       kms_key_id                   = data.aws_kms_key.key.id
       encrypted_password_payload   = var.encrypted_password_payload
     })

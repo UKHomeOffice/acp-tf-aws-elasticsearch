@@ -230,6 +230,11 @@ variable "kibana_password" {
   default     = ""
 }
 
+variable "visualization_role" {
+  description = "Boolean to create role with the ability to create visualizations and dashboards."
+  default     = true
+}
+
 variable "master_user_name" {
 
 }

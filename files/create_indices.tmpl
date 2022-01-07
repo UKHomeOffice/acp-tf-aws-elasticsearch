@@ -155,7 +155,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "large-index-policy"}'  -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.kibana/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {
@@ -181,7 +181,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "medium-index-policy"}'  -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.kibana/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {
@@ -207,7 +207,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "small-index-policy"}'  -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.kibana/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {
@@ -218,7 +218,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.kibana/_do
 '
 %{ endfor ~}
 
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.kibana/_doc/index-pattern:acp-wildcard" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:acp-wildcard" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {

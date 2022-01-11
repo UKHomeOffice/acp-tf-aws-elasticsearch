@@ -116,7 +116,17 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
         "manage", 
         "index"
       ]
-  }],
+  },
+  {
+      "index_patterns": [".tasks",".management-beats"],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": [
+        "indices_all"
+      ]
+  }
+  ],
   "tenant_permissions": [{
       "tenant_patterns": [],
       "allowed_actions": []

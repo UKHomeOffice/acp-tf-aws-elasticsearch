@@ -236,7 +236,7 @@ variable "visualization_role" {
 }
 
 variable "opensearch_user_role" {
-  description = "Boolean to create opensearch dashboard base user."
+  description = "Boolean to create opensearch dashboard base role."
   default     = true
 }
 

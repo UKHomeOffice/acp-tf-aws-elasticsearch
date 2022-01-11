@@ -82,7 +82,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 {
   "cluster_permissions": [],
   "index_permissions": [{
-      "index_patterns": [".kibana*"],
+      "index_patterns": [".opensearch_dashboards*"],
       "dls": "",
       "fls": [],
       "masked_fields": [],
@@ -90,6 +90,43 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
         "crud"
       ]
   }],
+  "tenant_permissions": [{
+      "tenant_patterns": [],
+      "allowed_actions": []
+  }]
+}
+'
+%{ endif ~}
+
+
+%{ if opensearch_user_role != false }
+echo ${encrypted_password_payload} | base64 -d > encrypted-file
+ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
+curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/roles/acp-opensearch_user" -H 'Content-Type: application/json' -d '
+{
+  "cluster_permissions": [],
+  "index_permissions": [{
+      "index_patterns": [".opensearch_dashboards",".opensearch_dashboards_*"],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": [
+        "read",
+        "delete",
+        "manage", 
+        "index"
+      ]
+  },
+  {
+      "index_patterns": [".tasks",".management-beats"],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": [
+        "indices_all"
+      ]
+  }
+  ],
   "tenant_permissions": [{
       "tenant_patterns": [],
       "allowed_actions": []

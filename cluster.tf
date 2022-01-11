@@ -141,6 +141,7 @@ resource "null_resource" "create_service_user_file" {
     proxy_username = var.proxy_username
     kibana_username = var.kibana_username
     visualization_role = var.visualization_role
+    opensearch_user_role = var.opensearch_user_role
   }
   provisioner "local-exec" {
     command = format(

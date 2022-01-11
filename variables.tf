@@ -235,6 +235,11 @@ variable "visualization_role" {
   default     = true
 }
 
+variable "opensearch_user_role" {
+  description = "Boolean to create opensearch dashboard base user."
+  default     = true
+}
+
 variable "master_user_name" {
 
 }

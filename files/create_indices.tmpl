@@ -2,7 +2,7 @@
 echo ${encrypted_password_payload} | base64 -d > encrypted-file
 ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
 
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:kubernetes-acp" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:kubernetes-acp" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {
@@ -13,7 +13,7 @@ curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.opensearch_d
 }
 '
 
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:kubernetes-audit" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:kubernetes-audit" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {
@@ -244,7 +244,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 '
 %{ endfor ~}
 
-curl -XPOST -u "${es_user}:${es_pass}" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:acp-wildcard" -H 'Content-Type: application/json' -d '
+curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:acp-wildcard" -H 'Content-Type: application/json' -d '
 {
   "type" : "index-pattern",
   "index-pattern" : {

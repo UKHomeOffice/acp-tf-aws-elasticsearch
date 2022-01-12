@@ -6,7 +6,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 {
   "type" : "index-pattern",
   "index-pattern" : {
-    "id": "kubernetes-acp"
+    "id": "kubernetes-acp",
     "title": "kubernetes-acp-*",
     "timeFieldName": "@timestamp"
   }
@@ -17,7 +17,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 {
   "type" : "index-pattern",
   "index-pattern" : {
-    "id": "kubernetes-audit"
+    "id": "kubernetes-audit",
     "title": "kubernetes-audit-*",
     "timeFieldName": "@timestamp"
   }
@@ -182,7 +182,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 {
   "type" : "index-pattern",
   "index-pattern" : {
-    "id": "${index}"  
+    "id": "${index}",
     "title": "${index}-*",
     "timeFieldName": "@timestamp"
   }
@@ -209,7 +209,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 {
   "type" : "index-pattern",
   "index-pattern" : {
-    "id": "${index}"  
+    "id": "${index}",
     "title": "${index}-*",
     "timeFieldName": "@timestamp"
   }
@@ -236,7 +236,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 {
   "type" : "index-pattern",
   "index-pattern" : {
-    "id": "${index}"  
+    "id": "${index}",
     "title": "${index}-*",
     "timeFieldName": "@timestamp"
   }
@@ -248,6 +248,7 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch
 {
   "type" : "index-pattern",
   "index-pattern" : {
+    "id": "acp-wildcard",
     "title": "*",
     "timeFieldName": "@timestamp"
   }

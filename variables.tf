@@ -220,6 +220,23 @@ variable "proxy_password" {
   default     = ""
 }
 
+variable "proxy_index_permissions" {
+  description = "Proxy index-level permissions for role."
+  default = [
+    "indices:admin/aliases/get",
+    "indices:data/write/index",
+    "indices:data/write/bulk*"
+  ]
+}
+variable "proxy_cluster_permissions" {
+  description = "Proxy cluster-level permissions."
+  default = [
+    "indices:admin/aliases/get",
+    "indices:data/write/index",
+    "indices:data/write/bulk*"
+  ]
+}
+
 variable "kibana_username" {
   description = "Kibana username in Kibana RBAC"
   default     = ""
@@ -228,16 +245,6 @@ variable "kibana_username" {
 variable "kibana_password" {
   description = "Kibana password in Kibana RBAC"
   default     = ""
-}
-
-variable "visualization_role" {
-  description = "Boolean to create role with the ability to create visualizations and dashboards."
-  default     = true
-}
-
-variable "opensearch_user_role" {
-  description = "Boolean to create opensearch dashboard base role."
-  default     = true
 }
 
 variable "master_user_name" {

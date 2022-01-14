@@ -28,10 +28,10 @@ locals {
       logstash_index_permissions   = var.logstash_index_permissions
       proxy_username               = var.proxy_username
       proxy_password               = var.proxy_password
+      proxy_cluster_permissions    = var.proxy_cluster_permissions
+      proxy_index_permissions      = var.proxy_index_permissions
       kibana_username              = var.kibana_username
       kibana_password              = var.kibana_password
-      visualization_role           = var.visualization_role
-      opensearch_user_role         = var.opensearch_user_role
       kms_key_id                   = data.aws_kms_key.key.id
       encrypted_password_payload   = var.encrypted_password_payload
     })

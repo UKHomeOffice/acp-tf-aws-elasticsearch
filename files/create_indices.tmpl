@@ -1,29 +1,6 @@
 #!/bin/bash
 echo ${encrypted_password_payload} | base64 -d > encrypted-file
 ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
-
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:kubernetes-acp" -H 'Content-Type: application/json' -d '
-{
-  "type" : "index-pattern",
-  "index-pattern" : {
-    "id": "kubernetes-acp",
-    "title": "kubernetes-acp-*",
-    "timeFieldName": "@timestamp"
-  }
-}
-'
-
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:kubernetes-audit" -H 'Content-Type: application/json' -d '
-{
-  "type" : "index-pattern",
-  "index-pattern" : {
-    "id": "kubernetes-audit",
-    "title": "kubernetes-audit-*",
-    "timeFieldName": "@timestamp"
-  }
-}
-'
-
 %{ if length(large_index_list) != 0 }
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/policies/large-index-policy" -H 'Content-Type: application/json' -d '
 {
@@ -178,16 +155,6 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "large-index-policy"}'  -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
-{
-  "type" : "index-pattern",
-  "index-pattern" : {
-    "id": "${index}",
-    "title": "${index}-*",
-    "timeFieldName": "@timestamp"
-  }
-}
-'
 %{ endfor ~}
 
 %{ for index in medium_index_list }
@@ -205,16 +172,6 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "medium-index-policy"}'  -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
-{
-  "type" : "index-pattern",
-  "index-pattern" : {
-    "id": "${index}",
-    "title": "${index}-*",
-    "timeFieldName": "@timestamp"
-  }
-}
-'
 %{ endfor ~}
 
 %{ for index in small_index_list }
@@ -232,25 +189,4 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001"
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/${index}-000001/_aliases/${index}" -d '{ "is_write_index" : "true" }' -H 'Content-Type: application/json'
 curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_ism/add/${index}" -d '{"policy_id": "small-index-policy"}'  -H 'Content-Type: application/json'
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:${index}" -H 'Content-Type: application/json' -d '
-{
-  "type" : "index-pattern",
-  "index-pattern" : {
-    "id": "${index}",
-    "title": "${index}-*",
-    "timeFieldName": "@timestamp"
-  }
-}
-'
 %{ endfor ~}
-
-curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/.opensearch_dashboards/_doc/index-pattern:acp-wildcard" -H 'Content-Type: application/json' -d '
-{
-  "type" : "index-pattern",
-  "index-pattern" : {
-    "id": "acp-wildcard",
-    "title": "*",
-    "timeFieldName": "@timestamp"
-  }
-}
-'

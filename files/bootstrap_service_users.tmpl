@@ -49,7 +49,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
     ${join(", ", formatlist("\"%s\"", proxy_cluster_permissions))}
   ],
   "index_permissions": [{
-      "index_patterns": [".kibana_*"],
+      "index_patterns": ["*"],
       "dls": "",
       "fls": [],
       "masked_fields": [],

@@ -43,10 +43,31 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 %{ if proxy_password != "" }
 echo ${encrypted_password_payload} | base64 -d > encrypted-file
 ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
+curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/roles/${proxy_username}" -H 'Content-Type: application/json' -d '
+{
+  "cluster_permissions": [
+    ${join(", ", formatlist("\"%s\"", proxy_cluster_permissions))}
+  ],
+  "index_permissions": [{
+      "index_patterns": ["*"],
+      "dls": "",
+      "fls": [],
+      "masked_fields": [],
+      "allowed_actions": [
+        ${join(", ", formatlist("\"%s\"", proxy_index_permissions))}
+      ]
+  }],
+  "tenant_permissions": [{
+      "tenant_patterns": [],
+      "allowed_actions": []
+  }]
+}
+'
+
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${proxy_username}" -H 'Content-Type: application/json' -d '
 {
   "password": "${proxy_password}",
-  "opendistro_security_roles": ["security_manager"],
+  "opendistro_security_roles": ["security_manager", ${proxy_username}],
   "backend_roles": [],
   "attributes": {
       "creation-mechanism": "tf-bootstrap-script",
@@ -73,64 +94,4 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 }
 '
 %{ endif ~}
-%{ endif ~}
-
-%{ if visualization_role != false }
-echo ${encrypted_password_payload} | base64 -d > encrypted-file
-ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
-curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/roles/acp-visualization" -H 'Content-Type: application/json' -d '
-{
-  "cluster_permissions": [],
-  "index_permissions": [{
-      "index_patterns": [".opensearch_dashboards*"],
-      "dls": "",
-      "fls": [],
-      "masked_fields": [],
-      "allowed_actions": [
-        "crud"
-      ]
-  }],
-  "tenant_permissions": [{
-      "tenant_patterns": [],
-      "allowed_actions": []
-  }]
-}
-'
-%{ endif ~}
-
-
-%{ if opensearch_user_role != false }
-echo ${encrypted_password_payload} | base64 -d > encrypted-file
-ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
-curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/roles/acp-opensearch_user" -H 'Content-Type: application/json' -d '
-{
-  "cluster_permissions": [],
-  "index_permissions": [{
-      "index_patterns": [".opensearch_dashboards",".opensearch_dashboards_*"],
-      "dls": "",
-      "fls": [],
-      "masked_fields": [],
-      "allowed_actions": [
-        "read",
-        "delete",
-        "manage", 
-        "index"
-      ]
-  },
-  {
-      "index_patterns": [".tasks",".management-beats"],
-      "dls": "",
-      "fls": [],
-      "masked_fields": [],
-      "allowed_actions": [
-        "indices_all"
-      ]
-  }
-  ],
-  "tenant_permissions": [{
-      "tenant_patterns": [],
-      "allowed_actions": []
-  }]
-}
-'
 %{ endif ~}

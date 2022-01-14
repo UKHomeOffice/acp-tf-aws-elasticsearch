@@ -67,7 +67,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${proxy_username}" -H 'Content-Type: application/json' -d '
 {
   "password": "${proxy_password}",
-  "opendistro_security_roles": ["security_manager", ${proxy_username}],
+  "opendistro_security_roles": ["security_manager", "${proxy_username}"],
   "backend_roles": [],
   "attributes": {
       "creation-mechanism": "tf-bootstrap-script",

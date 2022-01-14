@@ -136,15 +136,16 @@ resource "null_resource" "exec_admin_user_script" {
 }
 
 resource "null_resource" "create_service_user_file" {
+
   triggers = {
     logstash_username            = var.logstash_username
     logstash_password            = var.logstash_password
-    logstash_cluster_permissions = var.logstash_cluster_permissions
-    logstash_index_permissions   = var.logstash_index_permissions
+    logstash_cluster_permissions = join(",", var.logstash_cluster_permissions)
+    logstash_index_permissions   = join(",", var.logstash_index_permissions)
     proxy_username               = var.proxy_username
     proxy_password               = var.proxy_password
-    proxy_cluster_permissions    = var.proxy_cluster_permissions
-    proxy_index_permissions      = var.proxy_index_permissions
+    proxy_cluster_permissions    = join(",", var.proxy_cluster_permissions)
+    proxy_index_permissions      = join(",", var.proxy_index_permissions)
     kibana_username              = var.kibana_username
   }
   provisioner "local-exec" {
@@ -163,12 +164,12 @@ resource "null_resource" "exec_service_user_file" {
   triggers = {
     logstash_username            = var.logstash_username
     logstash_password            = var.logstash_password
-    logstash_cluster_permissions = var.logstash_cluster_permissions
-    logstash_index_permissions   = var.logstash_index_permissions
+    logstash_cluster_permissions = join(",", var.logstash_cluster_permissions)
+    logstash_index_permissions   = join(",", var.logstash_index_permissions)
     proxy_username               = var.proxy_username
     proxy_password               = var.proxy_password
-    proxy_cluster_permissions    = var.proxy_cluster_permissions
-    proxy_index_permissions      = var.proxy_index_permissions
+    proxy_cluster_permissions    = join(",", var.proxy_cluster_permissions)
+    proxy_index_permissions      = join(",", var.proxy_index_permissions)
     kibana_username              = var.kibana_username
   }
   provisioner "local-exec" {

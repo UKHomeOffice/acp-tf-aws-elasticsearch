@@ -1,22 +1,4 @@
 locals {
-    admin_content = templatefile("${path.module}/files/create_admin_users.tmpl",
-    {
-      es_user         = var.master_user_name
-      es_pass         = var.master_user_password
-      aws_es_endpoint = aws_elasticsearch_domain.cluster.endpoint
-      admin_users     = var.admin_users
-      kms_key_id      = data.aws_kms_key.key.id
-      encrypted_password_payload = var.encrypted_password_payload
-    })
-    tenant_content = templatefile("${path.module}/files/create_tenants.tmpl",
-    {
-        es_user         = var.master_user_name
-        es_pass         = var.master_user_password
-        aws_es_endpoint = aws_elasticsearch_domain.cluster.endpoint
-        tenant_list     = var.tenant_list
-        kms_key_id      = data.aws_kms_key.key.id
-        encrypted_password_payload = var.encrypted_password_payload
-    })
     service_user_content = templatefile("${path.module}/files/bootstrap_service_users.tmpl",
     {
       es_user                      = var.master_user_name

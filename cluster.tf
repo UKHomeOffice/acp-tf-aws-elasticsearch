@@ -104,37 +104,6 @@ resource "time_sleep" "wait_60_seconds" {
   create_duration = "60s"
 }
 
-resource "null_resource" "create_admin_user_script" {
-  count = var.admin_users != [] ? 1 : 0
-  triggers = {
-    admin_users = join(",", var.admin_users)
-  }
-  provisioner "local-exec" {
-    command = format(
-      "cat <<\"EOF\" > \"%s\"\n%s\nEOF",
-      "${path.module}/${var.domain_name}-admin-user-script.sh",
-      local.admin_content
-    )
-  }
-  depends_on = [
-    time_sleep.wait_60_seconds
-  ]
-}
-
-resource "null_resource" "exec_admin_user_script" {
-  count = var.admin_users != [] ? 1 : 0
-  triggers = {
-    users = join(",", var.admin_users)
-  }
-  provisioner "local-exec" {
-    command     = "./${path.module}/${var.domain_name}-admin-user-script.sh"
-    interpreter = ["sh"]
-  }
-  depends_on = [
-    null_resource.create_admin_user_script
-  ]
-}
-
 resource "null_resource" "create_service_user_file" {
 
   triggers = {
@@ -223,33 +192,3 @@ resource "null_resource" "exec_cluster_indices_file" {
   ]
 }
 
-resource "null_resource" "create_cluster_tenant_file" {
-  count = var.tenant_list != [] ? 1 : 0
-  triggers = {
-    template = local.tenant_content
-  }
-  provisioner "local-exec" {
-    command = format(
-      "cat <<\"EOF\" > \"%s\"\n%s\nEOF",
-      "${path.module}/${var.domain_name}-tenant-script.sh",
-      local.tenant_content
-    )
-  }
-  depends_on = [
-    time_sleep.wait_60_seconds
-  ]
-}
-
-resource "null_resource" "exec_cluster_tenant_file" {
-  count = var.tenant_list != [] ? 1 : 0
-  triggers = {
-    tenant_list = join(",", var.tenant_list)
-  }
-  provisioner "local-exec" {
-    command     = "./${path.module}/${var.domain_name}-tenant-script.sh"
-    interpreter = ["sh"]
-  }
-  depends_on = [
-    null_resource.create_cluster_tenant_file
-  ]
-}

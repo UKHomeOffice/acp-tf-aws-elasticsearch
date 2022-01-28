@@ -53,16 +53,6 @@ variable "volume_size" {
   default = 0
 }
 
-variable "admin_users" {
-  description = "group of users to be created in kibana."
-  default     = []
-}
-
-variable "tenant_list" {
-  description = "List of tenant names to be provisioned in Elasticsearch."
-  default     = []
-}
-
 variable "large_index_list" {
   description = "List of larger sized indexes to be created in Elasticsearch. e.g expected 1TB per day"
   default     = []

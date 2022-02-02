@@ -29,6 +29,16 @@ variable "master_instance_type" {
   description = "The instance type for the dedicated master nodes."
 }
 
+variable "zone_awareness_enabled" {
+  default     = true
+  description = "Whether zone awareness is enabled, set to true for multi-az deployment. "
+}
+
+variable "zone_awareness_availability_count" {
+  default     = 3
+  description = "Number of Availability Zones for the domain to use with var.zone_awareness_enabled"
+}
+
 variable "automated_snapshot_start_hour" {
   default = 23
 }

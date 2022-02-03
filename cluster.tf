@@ -10,9 +10,12 @@ resource "aws_elasticsearch_domain" "cluster" {
     dedicated_master_count   = var.master_instance_count
     dedicated_master_type    = var.master_instance_type
 
-    zone_awareness_enabled = true
-    zone_awareness_config {
-      availability_zone_count = 3
+    zone_awareness_enabled = var.zone_awareness_enabled
+    dynamic "zone_awareness_config" {
+      for_each = var.zone_awareness_enabled ? [true] : []
+      content {
+        availability_zone_count = var.zone_awareness_availability_count
+      }
     }
   }
 

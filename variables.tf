@@ -53,6 +53,11 @@ variable "volume_size" {
   default = 0
 }
 
+variable "max_clause_count" {
+  description = "For large scale queries, this is the maximum number of clauses an internal query can contain."
+  default = "4096"
+}
+
 variable "large_index_list" {
   description = "List of larger sized indexes to be created in Elasticsearch. e.g expected 1TB per day"
   default     = []

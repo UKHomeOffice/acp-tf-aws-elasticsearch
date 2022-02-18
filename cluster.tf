@@ -63,6 +63,10 @@ resource "aws_elasticsearch_domain" "cluster" {
     enabled = true
   }
 
+  advanced_options = {
+    "indices.query.bool.max_clause_count" = var.max_clause_count
+  }
+
   advanced_security_options {
     enabled = true
 

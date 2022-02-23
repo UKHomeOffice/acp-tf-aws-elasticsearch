@@ -69,12 +69,6 @@ resource "aws_elasticsearch_domain" "cluster" {
     "override_main_response_version" = var.override_main_response_version
   }
 
-  lifecycle { 
-    ignore_changes = [
-      advanced_options[0].
-    ]
-  }
-
   advanced_security_options {
     enabled = true
 

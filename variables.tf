@@ -68,6 +68,11 @@ variable "max_clause_count" {
   default = "4096"
 }
 
+variable "allow_explicit_index" {
+  description = "Boolean to confirm whether explicit index references are allowed inside the body of HTTP requests."
+  default = "true"
+}
+
 variable "large_index_list" {
   description = "List of larger sized indexes to be created in Elasticsearch. e.g expected 1TB per day"
   default     = []
@@ -105,7 +110,7 @@ variable "large_index_retention" {
 
 variable "large_index_field_limit" {
   description = "Large indices are likely to breach the default 1000 limit for elasticsearch fields, this set the updated limit in the index template."
-  default     = "2000"
+  default     = "4000"
 }
 
 variable "medium_index_list" {

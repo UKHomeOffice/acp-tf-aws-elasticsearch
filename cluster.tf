@@ -65,6 +65,12 @@ resource "aws_elasticsearch_domain" "cluster" {
 
   advanced_options = {
     "indices.query.bool.max_clause_count" = var.max_clause_count
+    "rest.action.multi.allow_explicit_index" = var.allow_explicit_index
+  }
+  lifecycle {
+    ignore_changes = [
+      advanced_options ## temporarily adding this ignore changes until all environments are on provider 3.70.0 and above to remove aws values from plan e.g override_main_response_version
+    ]
   }
 
   advanced_security_options {
@@ -186,6 +192,7 @@ resource "null_resource" "exec_cluster_indices_file" {
     large_index_replica_count     = var.large_index_replica_count
     medium_index_replica_count    = var.medium_index_replica_count
     small_index_replica_count     = var.small_index_replica_count
+    large_index_field_limit       = var.large_index_field_limit
     large_index_list              = join(",", var.large_index_list)
     medium_index_list             = join(",", var.medium_index_list)
     small_index_list              = join(",", var.small_index_list)

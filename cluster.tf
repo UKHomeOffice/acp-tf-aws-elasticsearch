@@ -69,7 +69,7 @@ resource "aws_elasticsearch_domain" "cluster" {
   }
   lifecycle {
     ignore_changes = [
-      advanced_options
+      advanced_options ## temporarily adding this ignore changes until all environments are on provider 3.70.0 and above to remove aws values from plan e.g override_main_response_version
     ]
   }
 

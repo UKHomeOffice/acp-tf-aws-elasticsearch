@@ -73,11 +73,6 @@ variable "allow_explicit_index" {
   default = "true"
 }
 
-variable "override_main_response_version" {
-  description = "Used to set how the opensearch domain is reported, if upgraded to an AWS opensearch domain from an elasticsearch version, set to true otherwise terraform will attempt to set this value to null. If creating an opensearch version direct set to false. Defaults to false"
-  default = "false"
-}
-
 variable "large_index_list" {
   description = "List of larger sized indexes to be created in Elasticsearch. e.g expected 1TB per day"
   default     = []

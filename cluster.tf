@@ -66,7 +66,11 @@ resource "aws_elasticsearch_domain" "cluster" {
   advanced_options = {
     "indices.query.bool.max_clause_count" = var.max_clause_count
     "rest.action.multi.allow_explicit_index" = var.allow_explicit_index
-    "override_main_response_version" = var.override_main_response_version
+  }
+  lifecycle {
+    ignore_changes = [
+      advanced_options
+    ]
   }
 
   advanced_security_options {

@@ -18,6 +18,10 @@ locals {
       proxy_index_permissions             = var.proxy_index_permissions
       kibana_username                     = var.kibana_username
       kibana_password                     = var.kibana_password
+      lambda_readonly_username            = var.lambda_readonly_username
+      lambda_readonly_password            = var.lambda_readonly_password
+      lambda_readonly_cluster_permissions = var.lambda_readonly_cluster_permissions
+      lambda_readonly_index_permissions   = var.lambda_readonly_index_permissions
       kms_key_id                          = data.aws_kms_key.key.id
       encrypted_password_payload          = var.encrypted_password_payload
   })

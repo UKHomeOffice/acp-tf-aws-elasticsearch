@@ -155,6 +155,8 @@ resource "null_resource" "exec_service_user_file" {
     proxy_cluster_permissions    = join(",", var.proxy_cluster_permissions)
     proxy_index_permissions      = join(",", var.proxy_index_permissions)
     kibana_username              = var.kibana_username
+    lambda_readonly_username     = var.lambda_readonly_username
+    lambda_readonly_password     = var.lambda_readonly_password
   }
   provisioner "local-exec" {
     command     = "./${path.module}/${var.domain_name}-bootstrap-service-script.sh"

@@ -64,7 +64,7 @@ resource "aws_elasticsearch_domain" "cluster" {
   }
 
   advanced_options = {
-    "indices.query.bool.max_clause_count" = var.max_clause_count
+    "indices.query.bool.max_clause_count"    = var.max_clause_count
     "rest.action.multi.allow_explicit_index" = var.allow_explicit_index
   }
   lifecycle {
@@ -129,6 +129,8 @@ resource "null_resource" "create_service_user_file" {
     proxy_cluster_permissions    = join(",", var.proxy_cluster_permissions)
     proxy_index_permissions      = join(",", var.proxy_index_permissions)
     kibana_username              = var.kibana_username
+    lambda_readonly_username     = var.lambda_readonly_username
+    lambda_readonly_password     = var.lambda_readonly_password
   }
   provisioner "local-exec" {
     command = format(

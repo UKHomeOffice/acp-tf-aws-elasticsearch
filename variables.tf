@@ -65,12 +65,12 @@ variable "volume_size" {
 
 variable "max_clause_count" {
   description = "For large scale queries, this is the maximum number of clauses an internal query can contain."
-  default = "4096"
+  default     = "4096"
 }
 
 variable "allow_explicit_index" {
   description = "Boolean to confirm whether explicit index references are allowed inside the body of HTTP requests."
-  default = "true"
+  default     = "true"
 }
 
 variable "large_index_list" {
@@ -254,6 +254,16 @@ variable "kibana_username" {
 
 variable "kibana_password" {
   description = "Kibana password in Kibana RBAC"
+  default     = ""
+}
+
+variable "lambda_readonly_username" {
+  description = "Lambda readonly username"
+  default     = ""
+}
+
+variable "lambda_readonly_password" {
+  description = "Lambda readonly password"
   default     = ""
 }
 

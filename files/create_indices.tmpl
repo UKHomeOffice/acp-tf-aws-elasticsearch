@@ -148,7 +148,8 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
         "refresh_interval": "${large_index_refresh_interval}",
         "number_of_replicas": "${large_index_replica_count}",
         "opendistro.index_state_management.rollover_alias": "${index}",
-        "index.mapping.total_fields.limit" : "${large_index_field_limit}"
+        "index.mapping.total_fields.limit" : "${large_index_field_limit}",
+        "index.max_docvalue_fields_search" : "${large_index_max_docvalue_fields_search}"
     }
 }
 '
@@ -165,7 +166,8 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
         "number_of_shards": "${medium_index_shard_count}",
         "refresh_interval": "${medium_index_refresh_interval}",
         "number_of_replicas": "${medium_index_replica_count}",
-        "opendistro.index_state_management.rollover_alias": "${index}"
+        "opendistro.index_state_management.rollover_alias": "${index}",
+        "index.max_docvalue_fields_search" : "${medium_index_max_docvalue_fields_search}"
     }
 }
 '
@@ -182,7 +184,8 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${
         "number_of_shards": "${small_index_shard_count}",
         "refresh_interval": "${small_index_refresh_interval}",
         "number_of_replicas": "${small_index_replica_count}",
-        "opendistro.index_state_management.rollover_alias": "${index}"
+        "opendistro.index_state_management.rollover_alias": "${index}",
+        "index.max_docvalue_fields_search" : "${small_index_max_docvalue_fields_search}"
     }
 }
 '

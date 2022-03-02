@@ -65,12 +65,12 @@ variable "volume_size" {
 
 variable "max_clause_count" {
   description = "For large scale queries, this is the maximum number of clauses an internal query can contain."
-  default = "4096"
+  default     = "4096"
 }
 
 variable "allow_explicit_index" {
   description = "Boolean to confirm whether explicit index references are allowed inside the body of HTTP requests."
-  default = "true"
+  default     = "true"
 }
 
 variable "large_index_list" {
@@ -113,6 +113,11 @@ variable "large_index_field_limit" {
   default     = "4000"
 }
 
+variable "large_index_max_docvalue_fields_search" {
+  description = "Large indices maximum number of docvalue_fields that are allowed in a query."
+  default     = "200"
+}
+
 variable "medium_index_list" {
   description = "List of medium sized indexes to be created in Elasticsearch. e.g 30GB per day"
   default     = []
@@ -141,6 +146,11 @@ variable "medium_index_rollover_size" {
 variable "medium_index_rollover_age" {
   description = "Updates the medium ISM policy with the index age limit before triggering the rollover action."
   default     = "1d"
+}
+
+variable "medium_index_max_docvalue_fields_search" {
+  description = "Medium indices maximum number of docvalue_fields that are allowed in a query."
+  default     = "200"
 }
 
 variable "medium_index_retention" {
@@ -181,6 +191,11 @@ variable "small_index_rollover_age" {
 variable "small_index_retention" {
   description = "Updates the ISM policy with the index retention time before being deleted."
   default     = "7d"
+}
+
+variable "small_index_max_docvalue_fields_search" {
+  description = "Small indices maximum number of docvalue_fields that are allowed in a query."
+  default     = "200"
 }
 
 variable "logstash_username" {

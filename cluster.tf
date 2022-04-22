@@ -120,15 +120,19 @@ resource "time_sleep" "wait_60_seconds" {
 resource "null_resource" "create_service_user_file" {
 
   triggers = {
-    logstash_username            = var.logstash_username
-    logstash_password            = var.logstash_password
-    logstash_cluster_permissions = join(",", var.logstash_cluster_permissions)
-    logstash_index_permissions   = join(",", var.logstash_index_permissions)
-    proxy_username               = var.proxy_username
-    proxy_password               = var.proxy_password
-    proxy_cluster_permissions    = join(",", var.proxy_cluster_permissions)
-    proxy_index_permissions      = join(",", var.proxy_index_permissions)
-    kibana_username              = var.kibana_username
+    logstash_username                   = var.logstash_username
+    logstash_password                   = var.logstash_password
+    logstash_cluster_permissions        = join(",", var.logstash_cluster_permissions)
+    logstash_index_permissions          = join(",", var.logstash_index_permissions)
+    logstash_helper_username            = var.logstash_helper_username
+    logstash_helper_password            = var.logstash_helper_password
+    logstash_helper_cluster_permissions = join(",", var.logstash_cluster_permissions)
+    logstash_helper_index_permissions   = join(",", var.logstash_helper_index_permissions)
+    proxy_username                      = var.proxy_username
+    proxy_password                      = var.proxy_password
+    proxy_cluster_permissions           = join(",", var.proxy_cluster_permissions)
+    proxy_index_permissions             = join(",", var.proxy_index_permissions)
+    kibana_username                     = var.kibana_username
   }
   provisioner "local-exec" {
     command = format(
@@ -144,15 +148,19 @@ resource "null_resource" "create_service_user_file" {
 
 resource "null_resource" "exec_service_user_file" {
   triggers = {
-    logstash_username            = var.logstash_username
-    logstash_password            = var.logstash_password
-    logstash_cluster_permissions = join(",", var.logstash_cluster_permissions)
-    logstash_index_permissions   = join(",", var.logstash_index_permissions)
-    proxy_username               = var.proxy_username
-    proxy_password               = var.proxy_password
-    proxy_cluster_permissions    = join(",", var.proxy_cluster_permissions)
-    proxy_index_permissions      = join(",", var.proxy_index_permissions)
-    kibana_username              = var.kibana_username
+    logstash_username                   = var.logstash_username
+    logstash_password                   = var.logstash_password
+    logstash_cluster_permissions        = join(",", var.logstash_cluster_permissions)
+    logstash_index_permissions          = join(",", var.logstash_index_permissions)
+    logstash_helper_username            = var.logstash_helper_username
+    logstash_helper_password            = var.logstash_helper_password
+    logstash_helper_cluster_permissions = join(",", var.logstash_cluster_permissions)
+    logstash_helper_index_permissions   = join(",", var.logstash_helper_index_permissions)
+    proxy_username                      = var.proxy_username
+    proxy_password                      = var.proxy_password
+    proxy_cluster_permissions           = join(",", var.proxy_cluster_permissions)
+    proxy_index_permissions             = join(",", var.proxy_index_permissions)
+    kibana_username                     = var.kibana_username
   }
   provisioner "local-exec" {
     command     = "./${path.module}/${var.domain_name}-bootstrap-service-script.sh"
@@ -208,4 +216,3 @@ resource "null_resource" "exec_cluster_indices_file" {
     null_resource.create_cluster_indices_file
   ]
 }
-

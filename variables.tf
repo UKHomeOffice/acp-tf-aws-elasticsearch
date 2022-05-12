@@ -308,38 +308,6 @@ variable "kibana_password" {
   default     = ""
 }
 
-variable "lambda_readonly_username" {
-  description = "Lambda readonly username"
-  default     = ""
-}
-
-variable "lambda_readonly_password" {
-  description = "Lambda readonly password"
-  default     = ""
-}
-
-variable "lambda_readonly_index_permissions" {
-  description = "Lambda read-only index-level permissions for role."
-  default = [
-    "indices:data/read/get",
-    "indices:data/read/mget",
-    "indices:data/read/mget*",
-    "indices:data/read/msearch",
-    "indices:data/read/msearch/template",
-    "indices:data/read/scroll",
-    "indices:data/read/scroll/clear",
-    "indices:data/read/search",
-    "indices:data/read/search*",
-    "indices:data/read/search/template"
-  ]
-}
-variable "lambda_readonly_cluster_permissions" {
-  description = "Lambda read-only cluster-level permissions."
-  default = [
-    "indices:data/read/scroll*"
-  ]
-}
-
 variable "master_user_name" {
 
 }

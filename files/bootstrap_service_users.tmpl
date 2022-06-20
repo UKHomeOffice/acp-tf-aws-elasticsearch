@@ -23,7 +23,7 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
       "allowed_actions": []
   }]
 }
-'
+' 
 
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${logstash_username}" -H 'Content-Type: application/json' -d '
 {
@@ -38,46 +38,6 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 '
 %{ endif ~}
 %{ endif ~}
-
-%{ if logstash_helper_username != "" }
-%{ if logstash_helper_password != "" }
-echo ${encrypted_password_payload} | base64 -d > encrypted-file
-ES_PASSWORD=$(aws kms decrypt --ciphertext-blob fileb://encrypted-file --query Plaintext --output text | base64 -d)
-curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/roles/${logstash_helper_username}" -H 'Content-Type: application/json' -d '
-{
-  "cluster_permissions": [
-    ${join(", ", formatlist("\"%s\"", logstash_helper_cluster_permissions))}
-  ],
-  "index_permissions": [{
-      "index_patterns": ["*"],
-      "dls": "",
-      "fls": [],
-      "masked_fields": [],
-      "allowed_actions": [
-        ${join(", ", formatlist("\"%s\"", logstash_helper_index_permissions))}
-      ]
-  }],
-  "tenant_permissions": [{
-      "tenant_patterns": [],
-      "allowed_actions": []
-  }]
-}
-'
-
-curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/_security/api/user/${logstash_helper_username}" -H 'Content-Type: application/json' -d '
-{
-  "password": "${logstash_helper_password}",
-  "opendistro_security_roles": ["${logstash_helper_username}"],
-  "backend_roles": [],
-  "attributes": {
-      "creation-mechanism": "tf-bootstrap-script",
-      "update-time": "${timestamp()}"
-  }
-}
-'
-%{ endif ~}
-%{ endif ~}
-
 
 %{ if proxy_username != "" }
 %{ if proxy_password != "" }

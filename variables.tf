@@ -198,6 +198,21 @@ variable "small_index_max_docvalue_fields_search" {
   default     = "200"
 }
 
+variable "ism_rollover_policy_failure_retry_count" {
+  description = "Maximum number of times to retry when an ism policy fails to rollover."
+  default     = "3"
+}
+
+variable "ism_rollover_policy_failure_retry_backoff" {
+  description = "Retry backoff duration in between retries for failed ism rollover policy."
+  default     = "exponential"
+}
+
+variable "ism_rollover_policy_failure_retry_delay" {
+  description = "Delay between retries for failed ism rollover policy e.g. 1m"
+  default     = "10m"
+}
+
 variable "logstash_username" {
   description = "Logstash username in Kibana RBAC"
   default     = ""

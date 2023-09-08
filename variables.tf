@@ -223,16 +223,6 @@ variable "logstash_password" {
   default     = ""
 }
 
-variable "logstash_helper_username" {
-  description = "Logstash-Helper username in Kibana RBAC"
-  default     = ""
-}
-
-variable "logstash_helper_password" {
-  description = "Logstash-Helper password in Kibana RBAC"
-  default     = ""
-}
-
 variable "logstash_index_permissions" {
   description = "Logstash index-level permissions."
   default = [
@@ -257,32 +247,6 @@ variable "logstash_cluster_permissions" {
     "indices:data/write/bulk*",
     "indices:data/write/index",
     "indices:admin/mapping/put"
-  ]
-}
-
-variable "logstash_helper_index_permissions" {
-  description = "Logstash-Helper index-level permissions."
-  default = [
-    "cluster:admin/opendistro/ism/policy/write",
-    "cluster:admin/opendistro/ism/managedindex/add",
-    "indices_all"
-  ]
-}
-
-variable "logstash_helper_cluster_permissions" {
-  description = "Logstash-Helper cluster-level permissions."
-  default = [
-    "cluster:admin/opendistro/ism/managedindex/add",
-    "cluster:admin/opendistro/ism/managedindex/change",
-    "cluster:admin/opendistro/ism/policy/write",
-    "cluster:admin/opendistro/ism/policy/get",
-    "cluster:admin/opendistro/ism/policy/search",
-    "indices:admin/create",
-    "indices:admin/aliases/exists",
-    "indices:admin/aliases/get",
-    "indices:admin/template/get",
-    "indices:admin/template/put",
-    "cluster:monitor/state"
   ]
 }
 
@@ -321,38 +285,6 @@ variable "kibana_username" {
 variable "kibana_password" {
   description = "Kibana password in Kibana RBAC"
   default     = ""
-}
-
-variable "lambda_readonly_username" {
-  description = "Lambda readonly username"
-  default     = ""
-}
-
-variable "lambda_readonly_password" {
-  description = "Lambda readonly password"
-  default     = ""
-}
-
-variable "lambda_readonly_index_permissions" {
-  description = "Lambda read-only index-level permissions for role."
-  default = [
-    "indices:data/read/get",
-    "indices:data/read/mget",
-    "indices:data/read/mget*",
-    "indices:data/read/msearch",
-    "indices:data/read/msearch/template",
-    "indices:data/read/scroll",
-    "indices:data/read/scroll/clear",
-    "indices:data/read/search",
-    "indices:data/read/search*",
-    "indices:data/read/search/template"
-  ]
-}
-variable "lambda_readonly_cluster_permissions" {
-  description = "Lambda read-only cluster-level permissions."
-  default = [
-    "indices:data/read/scroll*"
-  ]
 }
 
 variable "master_user_name" {

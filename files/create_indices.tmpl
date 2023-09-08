@@ -12,6 +12,11 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
             "name": "hot",
             "actions": [
                 {
+                    "retry": {
+                        "count": ${ism_rollover_policy_failure_retry_count},
+                        "backoff": "${ism_rollover_policy_failure_retry_backoff}",
+                        "delay": "${ism_rollover_policy_failure_retry_delay}"
+                    },
                     "rollover": {
                         "min_size": "${large_index_rollover_size}",
                         "min_index_age": "${large_index_rollover_age}"
@@ -58,6 +63,11 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
             "name": "hot",
             "actions": [
                 {
+                    "retry": {
+                        "count": ${ism_rollover_policy_failure_retry_count},
+                        "backoff": "${ism_rollover_policy_failure_retry_backoff}",
+                        "delay": "${ism_rollover_policy_failure_retry_delay}"
+                    },
                     "rollover": {
                         "min_size": "${medium_index_rollover_size}",
                         "min_index_age": "${medium_index_rollover_age}"
@@ -104,6 +114,11 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
             "name": "hot",
             "actions": [
                 {
+                    "retry": {
+                        "count": ${ism_rollover_policy_failure_retry_count},
+                        "backoff": "${ism_rollover_policy_failure_retry_backoff}",
+                        "delay": "${ism_rollover_policy_failure_retry_delay}"
+                    },
                     "rollover": {
                         "min_size": "${small_index_rollover_size}",
                         "min_index_age": "${small_index_rollover_age}"

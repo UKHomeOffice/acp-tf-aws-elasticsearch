@@ -80,6 +80,9 @@ No modules.
 | <a name="input_small_index_rollover_age"></a> [small\_index\_rollover\_age](#input\_small\_index\_rollover\_age) | Updates the small ISM policy with the index age limit before triggering the rollover action. | `string` | `"1d"` | no |
 | <a name="input_small_index_rollover_size"></a> [small\_index\_rollover\_size](#input\_small\_index\_rollover\_size) | Updates the small ISM policy with the index size limit before triggering the rollover action. | `string` | `"30gb"` | no |
 | <a name="input_small_index_shard_count"></a> [small\_index\_shard\_count](#input\_small\_index\_shard\_count) | Updates the small index template to define the amount of shards set for all indices. | `string` | `"1"` | no |
+| <a name="input_ism_rollover_policy_failure_retry_count"></a> [ism\_rollover\_policy\_failure\_retry\_count](#input\_ism\_rollover\_policy\_failure\_retry\_count) | Maximum number of times to retry when an ism policy fails to rollover. | `number` | `3` | no |
+| <a name="input_ism_rollover_policy_failure_retry_backoff"></a> [ism\_rollover\_policy\_failure\_retry\_backoff](#input\_ism\_rollover\_policy\_failure\_retry\_backoff) | Retry backoff duration in between retries for failed ism rollover policy. | `string` | `"exponential"` | no |
+| <a name="input_ism_rollover_policy_failure_retry_delay"></a> [ism\_rollover\_policy\_failure\_retry\_delay](#input\_ism\_rollover\_policy\_failure\_retry\_delay) | Delay between retries for failed ism rollover policy e.g. 1m | `string` | `"10m"` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | n/a | `any` | n/a | yes |
 | <a name="input_tags"></a> [tags](#input\_tags) | n/a | `any` | n/a | yes |
 | <a name="input_tenant_list"></a> [tenant\_list](#input\_tenant\_list) | List of tenant names to be provisioned in Elasticsearch. | `list` | `[]` | no |

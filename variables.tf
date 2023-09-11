@@ -198,6 +198,21 @@ variable "small_index_max_docvalue_fields_search" {
   default     = "200"
 }
 
+variable "ism_rollover_policy_failure_retry_count" {
+  description = "Maximum number of times to retry when an ism policy fails to rollover."
+  default     = "3"
+}
+
+variable "ism_rollover_policy_failure_retry_backoff" {
+  description = "Retry backoff duration in between retries for failed ism rollover policy."
+  default     = "exponential"
+}
+
+variable "ism_rollover_policy_failure_retry_delay" {
+  description = "Delay between retries for failed ism rollover policy e.g. 1m"
+  default     = "10m"
+}
+
 variable "logstash_username" {
   description = "Logstash username in Kibana RBAC"
   default     = ""
@@ -232,6 +247,42 @@ variable "logstash_cluster_permissions" {
     "indices:data/write/bulk*",
     "indices:data/write/index",
     "indices:admin/mapping/put"
+  ]
+}
+
+variable "logstash_helper_username" {
+  description = "Logstash-Helper username in Kibana RBAC"
+  default     = ""
+}
+
+variable "logstash_helper_password" {
+  description = "Logstash-Helper password in Kibana RBAC"
+  default     = ""
+}
+
+variable "logstash_helper_index_permissions" {
+  description = "Logstash-Helper index-level permissions."
+  default = [
+    "cluster:admin/opendistro/ism/policy/write",
+    "cluster:admin/opendistro/ism/managedindex/add",
+    "indices_all"
+  ]
+}
+
+variable "logstash_helper_cluster_permissions" {
+  description = "Logstash-Helper cluster-level permissions."
+  default = [
+    "cluster:admin/opendistro/ism/managedindex/add",
+    "cluster:admin/opendistro/ism/managedindex/change",
+    "cluster:admin/opendistro/ism/policy/write",
+    "cluster:admin/opendistro/ism/policy/get",
+    "cluster:admin/opendistro/ism/policy/search",
+    "indices:admin/create",
+    "indices:admin/aliases/exists",
+    "indices:admin/aliases/get",
+    "indices:admin/template/get",
+    "indices:admin/template/put",
+    "cluster:monitor/state"
   ]
 }
 

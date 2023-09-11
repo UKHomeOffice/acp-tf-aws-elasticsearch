@@ -223,16 +223,6 @@ variable "logstash_password" {
   default     = ""
 }
 
-variable "logstash_helper_username" {
-  description = "Logstash-Helper username in Kibana RBAC"
-  default     = ""
-}
-
-variable "logstash_helper_password" {
-  description = "Logstash-Helper password in Kibana RBAC"
-  default     = ""
-}
-
 variable "logstash_index_permissions" {
   description = "Logstash index-level permissions."
   default = [
@@ -258,6 +248,16 @@ variable "logstash_cluster_permissions" {
     "indices:data/write/index",
     "indices:admin/mapping/put"
   ]
+}
+
+variable "logstash_helper_username" {
+  description = "Logstash-Helper username in Kibana RBAC"
+  default     = ""
+}
+
+variable "logstash_helper_password" {
+  description = "Logstash-Helper password in Kibana RBAC"
+  default     = ""
 }
 
 variable "logstash_helper_index_permissions" {

@@ -126,7 +126,7 @@ resource "null_resource" "create_service_user_file" {
     logstash_index_permissions          = join(",", var.logstash_index_permissions)
     logstash_helper_username            = var.logstash_helper_username
     logstash_helper_password            = var.logstash_helper_password
-    logstash_helper_cluster_permissions = join(",", var.logstash_cluster_permissions)
+    logstash_helper_cluster_permissions = join(",", var.logstash_helper_cluster_permissions)
     logstash_helper_index_permissions   = join(",", var.logstash_helper_index_permissions)
     proxy_username                      = var.proxy_username
     proxy_password                      = var.proxy_password
@@ -154,7 +154,7 @@ resource "null_resource" "exec_service_user_file" {
     logstash_index_permissions          = join(",", var.logstash_index_permissions)
     logstash_helper_username            = var.logstash_helper_username
     logstash_helper_password            = var.logstash_helper_password
-    logstash_helper_cluster_permissions = join(",", var.logstash_cluster_permissions)
+    logstash_helper_cluster_permissions = join(",", var.logstash_helper_cluster_permissions)
     logstash_helper_index_permissions   = join(",", var.logstash_helper_index_permissions)
     proxy_username                      = var.proxy_username
     proxy_password                      = var.proxy_password

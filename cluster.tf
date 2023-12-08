@@ -175,7 +175,6 @@ resource "null_resource" "create_cluster_indices_file" {
   count = var.large_index_list != [] || var.medium_index_list != [] || var.small_index_list != [] ? 1 : 0
   triggers = {
     template = local.index_content
-    iqbal    = 1
   }
   provisioner "local-exec" {
     command = format(
@@ -208,7 +207,6 @@ resource "null_resource" "exec_cluster_indices_file" {
     large_index_max_docvalue_fields_search  = var.large_index_max_docvalue_fields_search
     medium_index_max_docvalue_fields_search = var.medium_index_max_docvalue_fields_search
     small_index_max_docvalue_fields_search  = var.small_index_max_docvalue_fields_search
-    iqbal                                   = 1
   }
   provisioner "local-exec" {
     command     = "./${path.module}/${var.domain_name}-cluster-index-script.sh"

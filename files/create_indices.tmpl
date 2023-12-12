@@ -170,9 +170,11 @@ curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro/
 %{ endif }
 
 %{ for index in large_index_list }
+ORDER=$(echo -n "${index}" | wc -c | sed "s/\ //g")
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
 {
     "index_patterns" : ["${index}-*"],
+    "order": '$ORDER',
     "settings" : {
         "number_of_shards": "${large_index_shard_count}",
         "refresh_interval": "${large_index_refresh_interval}",
@@ -189,9 +191,11 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro
 %{ endfor ~}
 
 %{ for index in medium_index_list }
+ORDER=$(echo -n "${index}" | wc -c | sed "s/\ //g")
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
 {
     "index_patterns" : ["${index}-*"],
+    "order": '$ORDER',
     "settings" : {
         "number_of_shards": "${medium_index_shard_count}",
         "refresh_interval": "${medium_index_refresh_interval}",
@@ -207,9 +211,11 @@ curl -XPOST -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_opendistro
 %{ endfor ~}
 
 %{ for index in small_index_list }
+ORDER=$(echo -n "${index}" | wc -c | sed "s/\ //g")
 curl -XPUT -u "${es_user}:$ES_PASSWORD" "https://${aws_es_endpoint}/_template/${index}-template" -H 'Content-Type: application/json' -d '
 {
     "index_patterns" : ["${index}-*"],
+    "order": '$ORDER',
     "settings" : {
         "number_of_shards": "${small_index_shard_count}",
         "refresh_interval": "${small_index_refresh_interval}",
